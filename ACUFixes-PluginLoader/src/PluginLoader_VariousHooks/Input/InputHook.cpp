@@ -55,6 +55,15 @@ void UpdateImGuiMouseInput(MouseState& mouseState)
 #include "ImGuiConsole.h"
 std::pair<bool, bool> IsNeedToBlockGameInput()
 {
+    // This hook may run a bit too early, before ImGui is fully initialized.
+    // When that happens, touching ImGui state is a bad idea and can crash the input path
+    // during startup, so we just bail out here.
+    // During update to 1.5.1 I managed to drop the game a couple of times here.
+    if (!Base::Data::IsImGuiInitialized || ImGui::GetCurrentContext() == NULL)
+    {
+        return { false, false };
+    }
+
     ImGuiIO& io = ImGui::GetIO();
     const bool blockMouse = io.WantCaptureMouse;
     const bool blockKeyboard = io.WantCaptureKeyboard;
@@ -94,7 +103,7 @@ void BeforeActionKeysAreUpdatedFromScancodes_RunRawInputHooks(AllRegisters* para
     GameRawInputHook_ImGuiLayer(inpBig);
 }
 #include "ACU_DefineNativeFunction.h"
-DEFINE_GAME_FUNCTION(GetCursorPos_P, 0x14273B3F0, void, __fastcall, (InputContainerBig* a1));
+DEFINE_GAME_FUNCTION(GetCursorPos_P, 0x14273B490, void, __fastcall, (InputContainerBig* a1));
 void GetCursorPos_SkipIfCapturingMouse(AllRegisters* params)
 {
     auto [blockMouse, blockKeyboard] = IsNeedToBlockGameInput();
@@ -103,13 +112,12 @@ void GetCursorPos_SkipIfCapturingMouse(AllRegisters* params)
 }
 GameRawInputHook::GameRawInputHook()
 {
-    uintptr_t beforeActionKeysAreUpdatedFromScancodes = 0x14273BC64;
+    uintptr_t beforeActionKeysAreUpdatedFromScancodes = 0x14273BD04;
     PresetScript_CCodeInTheMiddle(
         beforeActionKeysAreUpdatedFromScancodes, 6,
         BeforeActionKeysAreUpdatedFromScancodes_RunRawInputHooks, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
-
-    uintptr_t GetCursorPos_Parent_Callsite = 0x14273BDF0;
+    uintptr_t GetCursorPos_Parent_Callsite = 0x14273BE90;
     PresetScript_CCodeInTheMiddle(GetCursorPos_Parent_Callsite, 5,
         GetCursorPos_SkipIfCapturingMouse, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 }

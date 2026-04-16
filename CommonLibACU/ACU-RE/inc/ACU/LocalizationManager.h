@@ -60,6 +60,6 @@ public:
     char pad_0040[112]; //0x0040
 
     // @helper_functions
-    static LocalizationManager* GetSingleton() { return *(LocalizationManager**)0x145219CF0; }
+    static LocalizationManager* GetSingleton() { return *(LocalizationManager**)0x14521BC60; }
 }; //Size: 0x00B0
 assert_sizeof(LocalizationManager, 0xB0);

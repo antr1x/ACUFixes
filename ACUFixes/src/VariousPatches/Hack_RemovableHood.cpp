@@ -29,7 +29,7 @@ Most of these handles were discovered using the AnvilToolkit to unpack the follo
     DataPC_ACU_LGS_BelleEpoque.forge\334_-_CN_P_Arno.data\122_-_CN_P_ArnoAvatar_Hoods.BuildTable
     // Note: In game files, "Hood Down" means that the hood is off.
 The Handles for outfits not present in that file were caught by setting a breakpoint at
-    `Visual::SetVisibility()` 0x1421F4DD0
+    `Visual::SetVisibility()` 0x1421F5290
 and catching the `Visual`s that belong to player's `Entity`
 when the Hood mode changes in the Sequence 7, Mission 1: Cautious Alliance.
 */
@@ -41,6 +41,7 @@ when the Hood mode changes in the Sequence 7, Mission 1: Cautious Alliance.
 #include "ACU/Visual.h"
 #include "ACU/Sound/ACU_SoundUtils.h"
 #include "ACU/ACUGlobalSoundSet.h"
+#include "ACU/SoundEvent.h"
 #include "ACU/AtomAnimComponent.h"
 #include "ACU/LODSelectorInstance.h"
 #include "ACU/Material.h"
@@ -60,11 +61,15 @@ when the Hood mode changes in the Sequence 7, Mission 1: Cautious Alliance.
 
 #include "ImGuiCTX.h"
 
-constexpr uint64 Visual__VTable = 0x14309C7A0;
+constexpr uint64 Visual__VTable = 0x14309DB90;
 Visual* FindVisualCpnt(Entity& entity, uint64 lodSelectorHandle)
 {
     for (Component* cpnt : entity.cpnts_mb)
     {
+        if (!cpnt)
+        {
+            continue;
+        }
         if (*(uint64*)cpnt == Visual__VTable)
         {
             Visual* vis = static_cast<Visual*>(cpnt);
@@ -77,8 +82,8 @@ Visual* FindVisualCpnt(Entity& entity, uint64 lodSelectorHandle)
     return nullptr;
 }
 
-DEFINE_GAME_FUNCTION(Visual__ToggleVisibility, 0x1421F4DD0, int, __fastcall, (Visual* a1, unsigned char a2));
-DEFINE_GAME_FUNCTION(Visual__ToggleVisibility_P, 0x141CE1440, int, __fastcall, (Visual* a1, unsigned char a2));
+DEFINE_GAME_FUNCTION(Visual__ToggleVisibility, 0x1421F5290, int, __fastcall, (Visual* a1, unsigned char a2));
+DEFINE_GAME_FUNCTION(Visual__ToggleVisibility_P, 0x141CE1280, int, __fastcall, (Visual* a1, unsigned char a2));
 inline void ToggleVisualCpntVisibility(Visual& vis, bool doEnable)
 {
     // WARNING!
@@ -86,11 +91,11 @@ inline void ToggleVisualCpntVisibility(Visual& vis, bool doEnable)
     // If you want to turn visibility of Visual components, then depending on whether
     // you're running in the MainThread, or in the
     // Thread-That-Receives-Animation-Signals, you'll have better luck calling
-    // the "Visual__ToggleVisibility()" (0x1421F4DD0) or "Visual__ToggleVisibility_P" (0x141CE1440),
+    // the "Visual__ToggleVisibility()" (0x1421F5290) or "Visual__ToggleVisibility_P" (0x141CE1280),
     // and the wrong choice will have strange bugs in the few game moments
     // when hood's visibility is changed by a script.
     // The point is that the most reliable way I found of toggling visibility is to call
-    // 0x1421F4DD0 from the main thread (like when drawing ImGui).
+    // 0x1421F5290 from the main thread (like when drawing ImGui).
     // This is why the animated version of the hood toggle uses "scheduling"
     // instead of toggling Visuals immediately.
 
@@ -99,8 +104,8 @@ inline void ToggleVisualCpntVisibility(Visual& vis, bool doEnable)
     // as well as hair) on and off.
     // In the old version I used to toggle the visibility instantly
     // right in the context of the thread that executes the Swapchain::Present().
-    // I know that this version works perfectly fine with the game's function at 0x1421F4DD0.
-    // It also allows me to forcibly toggle hood in cutscenes, while using the function at 0x141CE1440
+    // I know that this version works perfectly fine with the game's function at 0x1421F5290.
+    // It also allows me to forcibly toggle hood in cutscenes, while using the function at 0x141CE1280
     // would result in cutscenes overwriting my decision.
     // But in the "animated" version of the Hood Toggle, I receive two different "animation signals" that indicate
     // the moment that the visibility of the visual components needs to be toggled on or off (just when Arno's hand
@@ -113,7 +118,7 @@ inline void ToggleVisualCpntVisibility(Visual& vis, bool doEnable)
     // Meaning, the "hood on" still stays "on". I __literally__ see the passed boolean argument being different in the debugger,
     // yet the result is exactly opposite in the __stable_50%_of_cases__.
     // Because of this, what might be the most unbelievable bug I've ever had to deal with,
-    // I need to use the 0x141CE1440 function in this context.
+    // I need to use the 0x141CE1280 function in this context.
     // (The reason, I think, is some bullcrap with the global thread locks or whatever, causing the state of the Visuals
     // to be refreshed instead of changed, see critical section at 1421F4E80).
     Visual__ToggleVisibility(&vis, doEnable);
@@ -122,6 +127,10 @@ void EnableVisibilityForVisualCpnt(Entity& entity, uint64 lodSelectorHandle, boo
 {
     for (Component* cpnt : entity.cpnts_mb)
     {
+        if (!cpnt)
+        {
+            continue;
+        }
         if (*(uint64*)cpnt == Visual__VTable)
         {
             Visual* vis = static_cast<Visual*>(cpnt);
@@ -229,6 +238,10 @@ HoodVariations g_Hoods({
 
 Visual* ToVisual(Component* cpnt)
 {
+    if (!cpnt)
+    {
+        return nullptr;
+    }
     if (*(uint64*)cpnt == Visual__VTable)
     {
         return (Visual*)cpnt;
@@ -278,10 +291,6 @@ void PlaySound_ToggleHood(Entity& player, bool doPutItOn)
         ? agss->arrSoundEvents_38[ACUGlobalSoundSet::k_ClothSoundSharp]
         : agss->arrSoundEvents_38[ACUGlobalSoundSet::k_LikeStartDisguiseButSharper];
     ACU::Sound::PlaySoundFromEntity(sound, player);
-}
-bool IsToggleHoodSoundEnabled()
-{
-    return true;
 }
 void PlayHoodAnimation(bool doPutHoodOn)
 {
@@ -365,9 +374,15 @@ bool IsHoodToggleShouldBeInstant()
 void StartToggleHood()
 {
     Entity* player = ACU::GetPlayer();
-    if (!player) { return; }
+    if (!player)
+    {
+        return;
+    }
     CurrentHoodState currentHood = FindCurrentHoodVariation(*player);
-    if (!currentHood.m_currentHood) { return; }
+    if (!currentHood.m_currentHood)
+    {
+        return;
+    }
     if (IsHoodToggleShouldBeInstant())
     {
         ToggleHoodVisuals(*currentHood.m_currentHood, !currentHood.m_isHoodOn);
@@ -376,8 +391,7 @@ void StartToggleHood()
     {
         PlayHoodAnimation(!currentHood.m_isHoodOn);
     }
-    if (IsToggleHoodSoundEnabled())
-        PlaySound_ToggleHood(*player, !currentHood.m_isHoodOn);
+    PlaySound_ToggleHood(*player, !currentHood.m_isHoodOn);
 }
 void DoManualHoodControls()
 {
@@ -390,9 +404,15 @@ void DoManualHoodControls()
         const bool truePutOnFalseTakeOff = *g_ScheduledHoodToogle;
         g_ScheduledHoodToogle.reset();
         Entity* player = ACU::GetPlayer();
-        if (!player) { return; }
+        if (!player)
+        {
+            return;
+        }
         CurrentHoodState currentHood = FindCurrentHoodVariation(*player);
-        if (!currentHood.m_currentHood) { return; }
+        if (!currentHood.m_currentHood)
+        {
+            return;
+        }
         ToggleHoodVisuals(*currentHood.m_currentHood, truePutOnFalseTakeOff);
     }
     if (ACU::Input::IsJustPressed(g_Config.hacks->hoodControls->hoodToggleButton))
@@ -428,8 +448,8 @@ public:
     char pad_0060[24]; //0x0060
 }; //Size: 0x0078
 assert_sizeof(MeshInstanceData, 0x78);
-DEFINE_GAME_FUNCTION(FXMaterialOverlayContainer_10_0__AddToPendingOverlayCommands_AddOverlay, 0x1421BE490, void, __fastcall, (FXMaterialOverlayContainer_10_0* a1, Material* a2, unsigned __int8 a3));
-DEFINE_GAME_FUNCTION(FXMaterialOverlayContainer_10_0__AddToPendingOverlayCommands_RemoveOverlay, 0x1421DEB50, void, __fastcall, (FXMaterialOverlayContainer_10_0* a1, Material* a2));
+DEFINE_GAME_FUNCTION(FXMaterialOverlayContainer_10_0__AddToPendingOverlayCommands_AddOverlay, 0x1421BE6F0, void, __fastcall, (FXMaterialOverlayContainer_10_0* a1, Material* a2, unsigned __int8 a3));
+DEFINE_GAME_FUNCTION(FXMaterialOverlayContainer_10_0__AddToPendingOverlayCommands_RemoveOverlay, 0x1421DEE20, void, __fastcall, (FXMaterialOverlayContainer_10_0* a1, Material* a2));
 Material* TryFindMaterialToApply(LODSelectorInstance& faceLODs)
 {
     MeshInstanceData* meshInstDataHighestLOD_mb = faceLODs.meshInstDatas[0];
@@ -456,8 +476,16 @@ void FindPlayerFaceComponentAndApplyTheMaterialWithoutTheFakeHoodShadow(Entity& 
     }
     for (MeshInstanceData* meshInstData : arnoFaceVisual->LODSelectorInstance_->meshInstDatas)
     {
+        if (!meshInstData)
+        {
+            continue;
+        }
         if (!meshInstData->arr30.size) { continue; }
         FXMaterialOverlayContainer_10_0* a1 = meshInstData->arr30[0];
+        if (!a1)
+        {
+            continue;
+        }
         if (trueAddFalseRemove)
         {
             FXMaterialOverlayContainer_10_0__AddToPendingOverlayCommands_AddOverlay(

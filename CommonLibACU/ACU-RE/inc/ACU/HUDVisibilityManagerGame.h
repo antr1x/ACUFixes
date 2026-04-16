@@ -15,6 +15,6 @@ public:
 	SmallArray<HUDModules> m_HUDLightHiddenAdditionnalModules; //0x0030
 	char pad_003C[364]; //0x003C
 
-	static HUDVisibilityManagerGame* GetSingleton() { return *(HUDVisibilityManagerGame**)0x145196D40; }
+	static HUDVisibilityManagerGame* GetSingleton() { return *(HUDVisibilityManagerGame**)0x145198CD0; }
 }; //Size: 0x01A8
 assert_sizeof(HUDVisibilityManagerGame, 0x1A8);

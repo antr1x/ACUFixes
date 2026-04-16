@@ -43,6 +43,6 @@ public:
     char pad_003C[4]; //0x003C
 
     // @helper_functions
-    static TypeInfo& GetTI() { return *(TypeInfo*)0x143EE24F0; }
+    static TypeInfo& GetTI() { return *(TypeInfo*)0x143EE44C0; }
 }; //Size: 0x0040
 assert_sizeof(InventoryItemSettings, 0x40);

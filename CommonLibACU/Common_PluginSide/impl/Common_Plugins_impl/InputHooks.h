@@ -40,6 +40,14 @@ private:
         m_ThisFrameMouseWheelDelta = inpCont.mouseState.mouseWheelDeltaInt;
     }
 public:
+    bool IsPressed(uint8 scancode)
+    {
+        return m_ThisFrameKeyStates[scancode];
+    }
+    bool IsPressed(MouseButton mouseButton)
+    {
+        return m_ThisFrameMouseButtonStates[(int)mouseButton];
+    }
     bool IsJustPressed(uint8 scancode)
     {
         return m_ThisFrameKeyStates[scancode] && !m_PrevFrameKeyStates[scancode];

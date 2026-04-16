@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "Hook_ZwRaiseException.h"
-#include "MyLog.h"
 
 #include <winternl.h>
 

@@ -128,7 +128,7 @@ void WhenCheckingIfInputIsStrongEnoughToExitHaystack_IgnoreSlowWalk(AllRegisters
 AllowSlowMenacingWalkAndAutowalk::AllowSlowMenacingWalkAndAutowalk()
 {
     CCodeInTheMiddleFunctionPtr_t receiverFunc = &AttenuateMovementVector;
-    uintptr_t whereToInject = 0x142739CBE;
+    uintptr_t whereToInject = 0x142739D5E;
     constexpr size_t howManyBytesStolen = 7;
     const bool isNeedToExecuteStolenBytesAfterwards = true;
     PresetScript_CCodeInTheMiddle(
@@ -136,8 +136,8 @@ AllowSlowMenacingWalkAndAutowalk::AllowSlowMenacingWalkAndAutowalk()
         , receiverFunc
         , RETURN_TO_RIGHT_AFTER_STOLEN_BYTES
         , isNeedToExecuteStolenBytesAfterwards);
-    uintptr_t whenCheckingIfInputIsStrongEnoughToExitHaystack = 0x14192A6D1;
-    uintptr_t whenCheckingIfInputIsStrongEnoughToExitHaystack_returnAfterCalculation = 0x14192A6EF;
+    uintptr_t whenCheckingIfInputIsStrongEnoughToExitHaystack = 0x14192A7F1;
+    uintptr_t whenCheckingIfInputIsStrongEnoughToExitHaystack_returnAfterCalculation = 0x14192A80F;
     PresetScript_CCodeInTheMiddle(whenCheckingIfInputIsStrongEnoughToExitHaystack, 7,
         WhenCheckingIfInputIsStrongEnoughToExitHaystack_IgnoreSlowWalk, whenCheckingIfInputIsStrongEnoughToExitHaystack_returnAfterCalculation, false);
 }

@@ -3,7 +3,7 @@
 #include "ACU/ForgeManager.h"
 #include "ACU_DefineNativeFunction.h"
 
-DEFINE_GAME_FUNCTION(ForgeFile__ctor, 0x142718900, ForgeFile*, __fastcall, (ForgeFile* a1));
+DEFINE_GAME_FUNCTION(ForgeFile__ctor, 0x142718A90, ForgeFile*, __fastcall, (ForgeFile* a1));
 
 ForgeFile::ForgeFile()
 {

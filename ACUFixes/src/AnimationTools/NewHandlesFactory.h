@@ -29,8 +29,8 @@ ACU::StrongRef<ManagedObjectSubcls> NewHandlesFactory::AllocateNewHandle()
 }
 
 #include "ACU_DefineNativeFunction.h"
-DEFINE_GAME_FUNCTION(UsesTypeInfoCreate, 0x1426EB1A0, ManagedObject*, __fastcall, (__int64 p_handle, __int64 a2, TypeInfo* a3));
-DEFINE_GAME_FUNCTION(JoinManagedObjectAndHandle_mb, 0x142714230, ManagedObject*, __fastcall, (__int64 p_handle, ManagedObject* p_manObj));
+DEFINE_GAME_FUNCTION(UsesTypeInfoCreate, 0x1426EB340, ManagedObject*, __fastcall, (__int64 p_handle, __int64 a2, TypeInfo* a3));
+DEFINE_GAME_FUNCTION(JoinManagedObjectAndHandle_mb, 0x142714250, ManagedObject*, __fastcall, (__int64 p_handle, ManagedObject* p_manObj));
 template<typename ManagedObjectSubcls, typename CallableThatInitializesTheObject>
 ACU::StrongRef<ManagedObjectSubcls> NewHandlesFactory::CreateNewManagedObject(CallableThatInitializesTheObject initialize)
 {

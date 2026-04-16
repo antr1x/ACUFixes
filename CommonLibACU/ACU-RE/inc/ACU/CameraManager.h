@@ -23,6 +23,6 @@ public:
     char pad_004C[76]; //0x004C
 
     // @helper_functions
-    static CameraManager* GetSingleton() { return *(CameraManager**)0x14521AAD0; }
+    static CameraManager* GetSingleton() { return *(CameraManager**)0x14521CA40; }
 }; //Size: 0x0098
 assert_sizeof(CameraManager, 0x98);

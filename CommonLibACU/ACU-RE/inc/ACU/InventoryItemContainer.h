@@ -14,7 +14,7 @@ public:
 	char pad_0008[8]; //0x0008
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x143EE2980; }
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x143EE4950; }
 }; //Size: 0x0010
 assert_sizeof(NewPhysicalInventoryItem, 0x10);
 

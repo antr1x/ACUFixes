@@ -112,7 +112,7 @@ namespace ACU::TypeInfos
 {
 inline ACUHashmap<TypeInfo::TypeNameHash_t, TypeInfo*>* GetTypeInfoSystem()
 {
-    auto* tisRoot = (ACUHashmap<uint32, TypeInfo*>*)0x14525BA10;
+    auto* tisRoot = (ACUHashmap<uint32, TypeInfo*>*)0x14525D950;
     return tisRoot;
 }
 inline TypeInfo* FindTypeInfoByTypeNameHash(TypeInfo::TypeNameHash_t typeNameHash)

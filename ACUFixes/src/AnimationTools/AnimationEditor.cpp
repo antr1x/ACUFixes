@@ -62,7 +62,7 @@ public:
 assert_sizeof(NativeAnimationTrackdataCodec, 0x30);
 auto& GetAnimationTrackdataCodecs()
 {
-    return *(std::array<NativeAnimationTrackdataCodec*, 72>*)0x145137A40;
+    return *(std::array<NativeAnimationTrackdataCodec*, 72>*)0x1451399C0;
 }
 
 
@@ -181,7 +181,7 @@ public:
 
         SmallArray<uint16> keyframeTimes;
         SmallArray<Vector3f> keyframeValues;
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         ACU::Memory::SmallArrayReserve(keyframeTimes, numKeyframes, g_currentHeap_mb);
         for (uint16 i = 0; i < numKeyframes; i++)
         {
@@ -403,7 +403,7 @@ public:
 
         SmallArray<uint16> keyframeTimes;
         SmallArray<UncompressedValue_t> keyframeValues;
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         ACU::Memory::SmallArrayReserve(keyframeTimes, numKeyframes, g_currentHeap_mb);
         for (uint16 i = 0; i < numKeyframes; i++)
         {
@@ -527,7 +527,7 @@ public:
 
         SmallArray<uint16> keyframeTimes;
         SmallArray<UncompressedValue_t> keyframeValues;
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         ACU::Memory::SmallArrayReserve(keyframeTimes, numKeyframes, g_currentHeap_mb);
         for (uint16 i = 0; i < numKeyframes; i++)
         {
@@ -907,12 +907,12 @@ static void AppendTrackName(ImGuiTextBuffer& buf, uint32 trackID)
 #include "ACU/Entity.h"
 #include "ACU/ACUGetSingletons.h"
 #include "ImGui3D/ImGui3D.h"
-constexpr uint64 vtbl_SkeletonComponent = 0x142E76630;
+constexpr uint64 vtbl_SkeletonComponent = 0x142E77620;
 static SkeletonComponent* GetEntityCpnt_SkeletonComponent(Entity& entity)
 {
     return static_cast<SkeletonComponent*>(entity.FindComponentByVTBL(vtbl_SkeletonComponent));
 }
-DEFINE_GAME_FUNCTION(BoneHandle__Get_GlobalPosition, 0x140030030, void, __fastcall, (BoneHandle* a1, __m128* posOut));
+DEFINE_GAME_FUNCTION(BoneHandle__Get_GlobalPosition, 0x1400301B0, void, __fastcall, (BoneHandle* a1, __m128* posOut));
 void AnimEditor_Draw3D::DrawBoneIfFound(SkeletonComponent& skelCpnt, uint32 boneID)
 {
     for (BoneHandle& bh : skelCpnt.BoneInstances)
@@ -1032,8 +1032,8 @@ struct TrackID_t
     };
 };
 
-DEFINE_GAME_FUNCTION(Animation__ctor, 0x140053270, Animation*, __fastcall, (Animation* a1));
-DEFINE_GAME_FUNCTION(AnimTrackData__ctor, 0x1400530D0, AnimTrackData*, __fastcall, (AnimTrackData* a1));
+DEFINE_GAME_FUNCTION(Animation__ctor, 0x140053190, Animation*, __fastcall, (Animation* a1));
+DEFINE_GAME_FUNCTION(AnimTrackData__ctor, 0x140052FF0, AnimTrackData*, __fastcall, (AnimTrackData* a1));
 void FillAnimationFromJSON(Animation& thisAnim, json::JSON& jsonAnim)
 {
     float& Length = thisAnim.Length;

@@ -3,9 +3,45 @@
 #include "ACU/TypeInfo.h"
 #include "ImGuiCTX.h"
 
+namespace
+{
+struct ModuleBounds
+{
+    uintptr_t begin = 0;
+    uintptr_t end = 0;
+};
+
+ModuleBounds GetMainGameModuleBounds()
+{
+    const HMODULE gameModule = GetModuleHandleW(nullptr);
+    if (!gameModule)
+    {
+        return {};
+    }
+
+    const auto* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(gameModule);
+    if (dos->e_magic != IMAGE_DOS_SIGNATURE)
+    {
+        return {};
+    }
+
+    const auto* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(
+        reinterpret_cast<const byte*>(gameModule) + dos->e_lfanew);
+    if (nt->Signature != IMAGE_NT_SIGNATURE)
+    {
+        return {};
+    }
+
+    const uintptr_t begin = reinterpret_cast<uintptr_t>(gameModule);
+    const uintptr_t end = begin + nt->OptionalHeader.SizeOfImage;
+    return { begin, end };
+}
+}
+
 bool IsInMainGameModule(uintptr_t addr)
 {
-    return addr >= 0x140000000 and addr <= 0x147825000;
+    const ModuleBounds bounds = GetMainGameModuleBounds();
+    return bounds.begin && addr >= bounds.begin && addr < bounds.end;
 }
 bool IsFunctionPtrInMainGameModule(uintptr_t addr)
 {
@@ -44,9 +80,9 @@ TypeInfo* FindFirstTypeInfoInThinBranch(uintptr_t thinBranch)
 uintptr_t FindWhereTypeInfosStartInBranch(uintptr_t branch)
 {
     // The operations below are done by the game during lookup of TypeInfos.
-    // For the logic behind this, see code at 0x14277AECE
+    // For the logic behind this, see code at 0x14277b4de
     uintptr_t thinBranch = readQword(branch);
-    uintptr_t garbageLengthLookupArray = 0x143649041;
+    uintptr_t garbageLengthLookupArray = 0x14364A451;
     byte helperValue = *(byte*)(branch + 8);
     byte garbageLength = *(byte*)(garbageLengthLookupArray + helperValue);
     return thinBranch + 8 * garbageLength;
@@ -80,10 +116,10 @@ private:
     {
         foundTIs.clear();
         foundTIs.reserve(8000);
-        // See function at 0x14277AA00 in ACU.exe for the way these structures are walked
+        // See function at 0x14277B010 in ACU.exe for the way these structures are walked
         // when looking up a TypeInfo.
 
-        uintptr_t TISroot = 0x14525BA10;
+        uintptr_t TISroot = 0x14525D950;
         uintptr_t trunk = readQword(TISroot);
         // This rounds down to address divisible by 8. This is what seems to be done
         // in the game.
@@ -184,9 +220,9 @@ private:
     {
         //safetyhook::ThreadFreezer holdIt;
         std::vector<ManuallyInspectedType> toSkip = {
-            ManuallyInspectedType{ "CameraManager", 0x14304D800, 0x141EF08E0 },
-            ManuallyInspectedType{ "CameraProxy", 0x143040D10, 0x141E6D4E0 },
-            ManuallyInspectedType{ "NetPartyManager", 0x143011920, 0x141E6D4E0 },
+            ManuallyInspectedType{ "CameraManager", 0x14304E9C0, 0x141eeffe0 },
+            ManuallyInspectedType{ "CameraProxy", 0x143041EC0, 0x1416afc50 },
+            ManuallyInspectedType{ "NetPartyManager", 0x143012B70, 0x1416afc50 },
         };
         size_t howManyDone = 0;
         for (size_t i = startFrom; i < std::min(startFrom + howManyAtMost, foundTIs.size()); i++)
@@ -235,17 +271,21 @@ private:
                 }
                 else
                 {
-                    constexpr uintptr_t gameModuleStart = 0x140000000;
-                    constexpr uintptr_t gameModuleEnd = 0x147825000;
+                    // Pulling the size from the PE header seems simpler and less fragile.
+                    // If there was a reason to keep the hardcoded constants here,
+                    // this can be reverted pretty easily.
+                    // constexpr uintptr_t gameModuleStart = 0x140000000;
+                    // constexpr uintptr_t gameModuleEnd = 0x147825000;
+                    const ModuleBounds gameModuleBounds = GetMainGameModuleBounds();
                     // Many types have this pointer at the start, but it's not a VTBL,
                     // just an empty shared pointer.
-                    constexpr uintptr_t gameModuleEmptySharedBlock = 0x14525BB58;
+                    constexpr uintptr_t gameModuleEmptySharedBlock = 0x14525DA98;
                     if (vtbl == gameModuleEmptySharedBlock)
                     {
                         ImGui::LogText("VTBL-DefinitelyNone");
                         vtbl = 0;
                     }
-                    else if (vtbl < gameModuleStart || vtbl >= gameModuleEnd)
+                    else if (!gameModuleBounds.begin || vtbl < gameModuleBounds.begin || vtbl >= gameModuleBounds.end)
                     {
                         ImGui::LogText("VTBL-NoneOrOutsideGameModule");
                         vtbl = 0;

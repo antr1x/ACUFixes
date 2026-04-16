@@ -49,6 +49,7 @@ void TypeInfoSystemTests();
 void DrawBuiltinDebugCommands();
 void DrawPlayerVisualsControls();
 void DrawWeatherControls();
+void DoKeepCursorInsideGameWindow();
 #include "ImGuiConfigUtils.h"
 #include "Common_Plugins/Common_PluginSide.h"
 void DrawModMenuControls()
@@ -67,6 +68,7 @@ void DrawHacksControls_DevExtras();
 #include "Handles.h"
 void ImGuiLayer_WhenMenuIsOpen()
 {
+    DoKeepCursorInsideGameWindow();
 #ifdef _DEBUG
     void RequestUnloadThisPlugin(); if (ImGui::Button("Unload this plugin")) RequestUnloadThisPlugin();
     ImGui::Separator();
@@ -221,6 +223,7 @@ void ShowHumanStatesLogIfNeeded();
 #include "AnimationTools/MyAnimationPlayer.h"
 void ImGuiLayer_EvenWhenMenuIsClosed()
 {
+    DoKeepCursorInsideGameWindow();
     g_MyAnimationPlayer.UpdateAnimations();
     ShowHumanStatesLogIfNeeded();
     DoSlowMotionTrick();

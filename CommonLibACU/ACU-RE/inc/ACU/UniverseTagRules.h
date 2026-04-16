@@ -14,6 +14,6 @@ public:
 	char pad_001C[4]; //0x001C
 
 	// @helper_functions
-	static UniverseTagRules* GetSingleton() { return *(UniverseTagRules**)0x1452173E8; }
+	static UniverseTagRules* GetSingleton() { return *(UniverseTagRules**)0x145219358; }
 }; //Size: 0x0020
 assert_sizeof(UniverseTagRules, 0x20);

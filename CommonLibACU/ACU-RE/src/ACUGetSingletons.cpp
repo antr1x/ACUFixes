@@ -49,7 +49,7 @@ namespace ACU {
         [[HasSwapchain+6f8]+8]
         [[HasSwapchain+6f8]+70]
         */
-        return *(uint64*)0x145136FD0;
+        return *(uint64*)0x145138F50;
     }
     IDXGISwapChain* GetSwapchain()
     {
@@ -63,7 +63,7 @@ namespace ACU {
     {
         Entity* player = ACU::GetPlayer();
         if (!player) { return nullptr; }
-        constexpr uint64 vtbl_SkeletonComponent = 0x142E76630;
+        constexpr uint64 vtbl_SkeletonComponent = 0x142E77620;
         SkeletonComponent* skeletonCpnt = static_cast<SkeletonComponent*>(player->FindComponentByVTBL(vtbl_SkeletonComponent));
         return skeletonCpnt;
     }
@@ -71,7 +71,7 @@ namespace ACU {
     {
         Entity* player = ACU::GetPlayer();
         if (!player) { return nullptr; }
-        constexpr uint64 vtbl_AtomAnimComponent = 0x142E7F780;
+        constexpr uint64 vtbl_AtomAnimComponent = 0x142E80600;
         AtomAnimComponent* atomAnimCpnt = static_cast<AtomAnimComponent*>(player->FindComponentByVTBL(vtbl_AtomAnimComponent));
         return atomAnimCpnt;
     }

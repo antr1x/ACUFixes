@@ -58,7 +58,7 @@ DontRandomlyTurn180Degrees::DontRandomlyTurn180Degrees()
         Triggers very often, thousands of times per second, I guess.
         I do not detect any FPS drop from placing this hook, to be fair.
         */
-        //uintptr_t whenSettingPlayerTransform = 0x1425DE360;
+        //uintptr_t whenSettingPlayerTransform = 0x1420f7ab0;
         //PresetScript_CCodeInTheMiddle(whenSettingPlayerTransform, 7,
         //    WhenSettingPlayerTransform_dontRandomlyFlip180, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     }
@@ -67,7 +67,7 @@ DontRandomlyTurn180Degrees::DontRandomlyTurn180Degrees()
         This one still triggers more often than I'd like,
         but less frequently, and the results seem to be the same.
         */
-        uintptr_t whenSettingPlayerTransform_slightlyLessFrequent = 0x1420F7350;
+        uintptr_t whenSettingPlayerTransform_slightlyLessFrequent = 0x1420F7620;
         PresetScript_CCodeInTheMiddle(whenSettingPlayerTransform_slightlyLessFrequent, 5,
             WhenSettingPlayerTransform_dontRandomlyFlip180, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     }
@@ -78,7 +78,7 @@ DontRandomlyTurn180Degrees::DontRandomlyTurn180Degrees()
         (when you are crouching and take exactly 1 (unfinished) step with the right foot),
         but sadly there were still some missed "turnarounds".
         */
-        //uintptr_t whenSettingPlayerTransform_evenLessFrequent = 0x142608280;
+        //uintptr_t whenSettingPlayerTransform_evenLessFrequent = 0x142608370;
         //PresetScript_CCodeInTheMiddle(whenSettingPlayerTransform_evenLessFrequent, 7,
         //    WhenSettingPlayerTransform_evenLessFrequent_dontRandomlyFlip180, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     }

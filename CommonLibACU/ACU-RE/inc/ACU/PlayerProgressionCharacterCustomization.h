@@ -20,7 +20,7 @@ public:
 	char pad_0035[3]; //0x0035
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x143E37430; }
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x143E393B0; }
 }; //Size: 0x0038
 assert_sizeof(BodyBuildTag, 0x38);
 

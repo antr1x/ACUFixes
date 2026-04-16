@@ -7,9 +7,9 @@
 AimFromPeaks::AimFromPeaks()
 {
     // Crashes if tried on slopes and in V-Shapes such as trees, flagpoles.
-    //DEFINE_ADDR(whenTryToStartAimingFromPeak, 0x1419158E0);
-    //DEFINE_ADDR(whenTryToStartAimingFromLedge, 0x141A262A0);
-    //DEFINE_ADDR(whenTryToStartAimingFromGround, 0x141A0DAB0);
+    //DEFINE_ADDR(whenTryToStartAimingFromPeak, 0x1419fdc70);
+    //DEFINE_ADDR(whenTryToStartAimingFromLedge, 0x1419FB5C0);
+    //DEFINE_ADDR(whenTryToStartAimingFromGround, 0x141a0c980);
     //whenTryToStartAimingFromPeak = {
     //    0xE9, RIP(whenTryToStartAimingFromLedge)
     //};
@@ -18,8 +18,8 @@ AimFromPeaks::AimFromPeaks()
     /*
     When trying to aim bombs from a peak (normally not allowed), I call a function that is used
     when trying to aim from a ledge (normally allowed).
-    When trying to aim from a peak: 0x1419158E0 ("Empty callback")
-    When trying to aim from a ledge: 0x141A262A0 ("Working callback")
+    When trying to aim from a peak: 0x1419fdc70 ("Empty callback")
+    When trying to aim from a ledge: 0x1419FB5C0 ("Working callback")
     The callback that is used on peaks returns almost immediately, and doesn't start aiming.
     The hack constists of jumping from the "Empty callback" immediately into the "Working callback".
     The tricky thing is that the "Empty callback" is also triggered when trying to aim from a slope
@@ -39,10 +39,10 @@ AimFromPeaks::AimFromPeaks()
     */
 
 
-    DEFINE_ADDR(whenTryToStartAimingFromPeak, 0x1419158E0);
-    DEFINE_ADDR(whenTryToStartAimingFromLedge, 0x141A262A0);
-    ALLOC(whenTryToStartAimingFromPeak_cave, 0x80, 0x1419158E0);
-    constexpr uint64 whileOnPeak_0xE0 = 0x141A5DC00;
+    DEFINE_ADDR(whenTryToStartAimingFromPeak, 0x1419fdc70);
+    DEFINE_ADDR(whenTryToStartAimingFromLedge, 0x1419FB5C0);
+    ALLOC(whenTryToStartAimingFromPeak_cave, 0x80, 0x1419fdc70);
+    constexpr uint64 whileOnPeak_0xE0 = 0x141a5d240;
     LABEL(whileOnPeak_0xE0__storage);
 
     whenTryToStartAimingFromPeak = {

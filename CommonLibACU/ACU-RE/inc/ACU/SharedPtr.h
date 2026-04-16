@@ -15,7 +15,7 @@ public:
     uint64 handle; //0x0010
 
     // @helper_functions
-    ManagedObject* GetPtr() { return (ManagedObject*)((uint64)manObj & ((int64)strongRefCountAndFlags << 32 >> 63)); } // see at 0x14082E776
+    ManagedObject* GetPtr() { return (ManagedObject*)((uint64)manObj & ((int64)strongRefCountAndFlags << 32 >> 63)); } // see at 0x14082e006
     void IncrementWeakRefcount() { _InterlockedIncrement((volatile long*)&weakRefCount); }
     void IncrementStrongRefcount() { _InterlockedIncrement((volatile long*)&strongRefCountAndFlags); }
     void DecrementWeakRefcount();

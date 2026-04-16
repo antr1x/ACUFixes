@@ -78,6 +78,7 @@ public:
     AtomGraph_98* p98; //0x0098
 
     // @members
-    static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D88E0; }
+    // This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+    static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DA8F0; }
 }; //Size: 0x00A0
 assert_sizeof(AtomGraph, 0xA0);

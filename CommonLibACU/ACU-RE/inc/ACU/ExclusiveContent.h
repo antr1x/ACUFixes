@@ -26,7 +26,7 @@ public:
 	char pad_016C[4]; //0x016C
 
 	// @helper_functions
-	static UsedWhenCheckingIfMissionCompleted* GetSingleton() { return *(UsedWhenCheckingIfMissionCompleted**)0x145198478; }
+	static UsedWhenCheckingIfMissionCompleted* GetSingleton() { return *(UsedWhenCheckingIfMissionCompleted**)0x14519A410; }
 }; //Size: 0x0170
 assert_offsetof(UsedWhenCheckingIfMissionCompleted, arrExclusiveContent, 0x160);
 assert_sizeof(UsedWhenCheckingIfMissionCompleted, 0x170);

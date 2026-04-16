@@ -35,7 +35,7 @@ struct CrouchFix : AutoAssemblerCodeHolder_Base
 {
     CrouchFix()
     {
-        uintptr_t whenTryingToCrouch_dontEnterCrouchModeUntilStoppedSprinting = 0x141AFBE56;
+        uintptr_t whenTryingToCrouch_dontEnterCrouchModeUntilStoppedSprinting = 0x141AFB1F6;
         PresetScript_NOP(
             whenTryingToCrouch_dontEnterCrouchModeUntilStoppedSprinting, 2);
         // Yep, that's a two-byte fix.

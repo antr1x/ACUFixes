@@ -21,15 +21,15 @@ public:
 };
 PresentHookOuterPatch::PresentHookOuterPatch()
 {
-    DEFINE_ADDR(justBeforePresentIsCalled, 0x14230563F);
-    ALLOC(justBeforePresentIsCalled_cave, 0x80, 0x14230563F);
+    DEFINE_ADDR(justBeforePresentIsCalled, 0x142305D7F);
+    ALLOC(justBeforePresentIsCalled_cave, 0x80, 0x142305D7F);
 
     // I execute a "call" instead of "jmp" to the code cave, from which I "jmp" into C++.
     // This way the return address pushed to the stack belongs to ACU.exe module
     // and has a corresponding unwind information, which helps the CrashLog in generating a stacktrace.
 
     // Total 6 bytes stolen; my custom Present()
-    // will return to 0x142305644.
+    // will return to 0x142305d84.
     justBeforePresentIsCalled = {
         db(0xE8), RIP(justBeforePresentIsCalled_cave),
         nop(1)

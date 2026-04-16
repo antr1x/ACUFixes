@@ -416,7 +416,7 @@ So this is the current fix:
 */
 ModifyConditionalFOVs::ModifyConditionalFOVs()
 {
-    constexpr uintptr_t onCameraBlendingModeChanged = 0x141F4E4DE;
+    constexpr uintptr_t onCameraBlendingModeChanged = 0x141F4E96E;
     PresetScript_CCodeInTheMiddle(
         onCameraBlendingModeChanged, 7
         , WhenCameraBlendingModeChanged_HijackConditionalFOVs
@@ -424,7 +424,7 @@ ModifyConditionalFOVs::ModifyConditionalFOVs()
         , true);
 
 
-    constexpr uintptr_t onCameraUpdateStarts = 0x141F3F1EE;
+    constexpr uintptr_t onCameraUpdateStarts = 0x141F3F68E;
     PresetScript_CCodeInTheMiddle(
         onCameraUpdateStarts, 7
         , WhenCameraUpdateStarts

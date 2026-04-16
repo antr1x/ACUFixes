@@ -7,7 +7,7 @@
 #include "ACU_DefineNativeFunction.h"
 
 class ActionWeatherWindSelection;
-DEFINE_GAME_FUNCTION(ActionWeatherWindSelection__SetWeather_mb, 0x141EC10E0, void, __fastcall, (ActionWeatherWindSelection* a1, char a2));
+DEFINE_GAME_FUNCTION(ActionWeatherWindSelection__SetWeather_mb, 0x141EC0A60, void, __fastcall, (ActionWeatherWindSelection* a1, char a2));
 
 class Fake_ActionWeatherWindSelection
 {
@@ -218,7 +218,7 @@ void LetTheWeatherGo()
 }
 
 
-DEFINE_GAME_FUNCTION(TimeOfDayManager__SetCurrentSeason_mb, 0x141E2F660, void, __fastcall, (TimeOfDayManager* a1, unsigned int seasonID));
+DEFINE_GAME_FUNCTION(TimeOfDayManager__SetCurrentSeason_mb, 0x141E2F2F0, void, __fastcall, (TimeOfDayManager* a1, unsigned int seasonID));
 void SetTimeOfDay(SeasonID seasonID)
 {
     TimeOfDayManager* todMan = TimeOfDayManager::GetSingleton();

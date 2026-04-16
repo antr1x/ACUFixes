@@ -4,8 +4,8 @@
 
 AllowCustomizeEquipment::AllowCustomizeEquipment()
 {
-    DEFINE_ADDR(whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState, 0x141A19B30);
-    ALLOC(whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState__cave, 0x80, 0x141A19B30);
+    DEFINE_ADDR(whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState, 0x141A19380);
+    ALLOC(whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState__cave, 0x80, 0x141A19380);
     LABEL(whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState__return);
     whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState = {
         db(0xE9), RIP(whenPlayerOnLedgeOrPeakAndCheckingIfInAParticularNavigationState__cave),

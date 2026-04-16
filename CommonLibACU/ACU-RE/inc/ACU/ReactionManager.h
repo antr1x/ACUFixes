@@ -22,6 +22,6 @@ public:
 	char pad_0480[184]; //0x0480
 
     // @helper_functions
-    static ReactionManager* GetSingleton() { return *(ReactionManager**)0x1451B5220; }
+    static ReactionManager* GetSingleton() { return *(ReactionManager**)0x1451B71A0; }
 }; //Size: 0x0538
 assert_sizeof(ReactionManager, 0x538);

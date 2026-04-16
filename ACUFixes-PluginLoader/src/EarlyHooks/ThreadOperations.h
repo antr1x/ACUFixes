@@ -33,13 +33,9 @@ void ForEachThreadIDOfThisProcess(CallableOnThreadID&& callableForEveryThreadID)
     CloseHandle(snapshot);
 }
 uintptr_t GetThreadStartAddress(HANDLE thread_handle);
-uintptr_t GetCurrentThreadStartAddress();
-struct FoundThread
-{
-    ThreadID_t m_ThreadID;
-    HANDLE m_ThreadHandle;
-};
-std::optional<FoundThread> FindThreadForStartAddress(uintptr_t startAddress);
+uintptr_t ResolveSingleRel32BranchTarget(uintptr_t address);
+bool IsEquivalentThreadStartAddress(uintptr_t candidateStartAddress, uintptr_t expectedStartAddress);
+uintptr_t ResolveMainIntegrityCheckThreadStartAddress();
 
 std::vector<HANDLE> SuspendAllOtherThreads();
 class SuspendAllOtherThreadsRAII

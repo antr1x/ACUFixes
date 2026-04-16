@@ -63,7 +63,7 @@ public:
 	char pad_03BC[4]; //0x03BC
 
 	// @helper_functions
-	static MissionManager* GetSingleton() { return *(MissionManager**)0x14521A210; }
+	static MissionManager* GetSingleton() { return *(MissionManager**)0x14521C188; }
 }; //Size: 0x03C0
 assert_offsetof(MissionManager, missionGroups200_locked_mb, 0x200);
 assert_offsetof(MissionManager, dlcMissionGroups_mb_3B0, 0x3B0);

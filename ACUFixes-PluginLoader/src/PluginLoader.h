@@ -3,6 +3,7 @@
 
 #include "Common_Plugins/ACUPlugin.h"
 using ACUPluginStart_fnt = decltype(ACUPluginStart)*;
+
 struct MyPluginResult
 {
     MyPluginResult(const fs::path& filepath)
@@ -55,3 +56,13 @@ private:
     bool m_IsRequestedToUnloadPlugin = false;
     ACUPluginLoaderInterface m_PluginLoaderInterfaces;
 };
+
+HMODULE PluginLoader_GetPluginIfLoaded(const wchar_t* pluginName);
+void PluginLoader_RequestUnloadPlugin(HMODULE dllHandle);
+void EveryFrameBeforeGraphicsUpdate();
+void DrawPluginListControls();
+void DrawPluginsWhenMenuOpen();
+void DrawPluginsEvenWhenMenuIsClosed();
+void PluginLoader_FirstTimeGatherPluginsAndCheckCompatibility();
+void PluginLoader_WhenGameCodeIsUnpacked();
+void PluginLoader_WhenSafeToApplyCodePatches();

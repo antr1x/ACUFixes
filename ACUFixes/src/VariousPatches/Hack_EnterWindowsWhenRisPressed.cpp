@@ -9,7 +9,6 @@
 #include "Common_Plugins/ACU_InputUtils.h"
 
 #include "MainConfig.h"
-
 uint32_t float_bytes(float f) { return (uint32_t&)f; }
 void Patch_RunWindowEntryTesterIfRequested_cppTrampoline(AssemblerContext* m_ctx);
 void Patch_AlwaysRunWindowEntryTester(AssemblerContext* m_ctx);
@@ -26,7 +25,7 @@ static bool IsEnabled_AssistedEnterClosets()
 {
     return g_Config.hacks->enterWindowsByPressingAButton->alsoEnterNearbyHidespotClosets;
 }
-DEFINE_GAME_FUNCTION(IsShouldEnterHideyClosetNow, 0x14265B350, char, __fastcall, (__int64 a1, __int64 a2));
+DEFINE_GAME_FUNCTION(IsShouldEnterHideyClosetNow, 0x14265B4B0, char, __fastcall, (__int64 a1, __int64 a2));
 void WhenCheckingIfHideyClosetIsToBeEnteredNow_ConfirmIfRequestedForThisFrame(AllRegisters* params)
 {
     if (IsEnabled_AssistedEnterClosets())
@@ -61,21 +60,19 @@ EnterWindowWhenRisPressed::EnterWindowWhenRisPressed()
 
     So when allocating variables, allocate them near the Game Module Base (0x140000000, usually) (do the same in Cheat Engine scripts).
     */
-    uintptr_t whenCheckingIfWindowIsToBeEnteredNow = 0x1401B0790;
+    uintptr_t whenCheckingIfWindowIsToBeEnteredNow = 0x1401B0450;
     PresetScript_CCodeInTheMiddle(whenCheckingIfWindowIsToBeEnteredNow, 7,
         WhenCheckingIfWindowIsToBeEnteredNow_ConfirmIfRequestedForThisFrame, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenCheckingIfHideyClosetIsToBeEnteredNow = 0x14265A2DF;
+    uintptr_t whenCheckingIfHideyClosetIsToBeEnteredNow = 0x14265A43F;
     PresetScript_CCodeInTheMiddle(whenCheckingIfHideyClosetIsToBeEnteredNow, 5,
         WhenCheckingIfHideyClosetIsToBeEnteredNow_ConfirmIfRequestedForThisFrame, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 
-    {
-        const uintptr_t beforeStartedWindowEntryScan = 0x141A4C60F;
-        const uintptr_t afterFinishedWindowEntryScan = 0x141A4C69B;
-        PresetScript_CCodeInTheMiddle(beforeStartedWindowEntryScan, 9,
-            WhenCheckingIfMovementMagnitudeIsNonzeroAndRunningWindowEntryScanner_ForceRunScansIfHotkeyIsPressed, afterFinishedWindowEntryScan, false);
-        PresetScript_CCodeInTheMiddle(0x141A4CBDC, 7,
-            WhenCheckingIfPlayerIsMovingBeforePerformingSortAndSelect_ForceRunIfHotkeyIsPressed, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    }
+    const uintptr_t beforeStartedWindowEntryScan = 0x141A4B9FF;
+    const uintptr_t afterFinishedWindowEntryScan = 0x141A4BA8B;
+    PresetScript_CCodeInTheMiddle(beforeStartedWindowEntryScan, 9,
+        WhenCheckingIfMovementMagnitudeIsNonzeroAndRunningWindowEntryScanner_ForceRunScansIfHotkeyIsPressed, afterFinishedWindowEntryScan, false);
+    PresetScript_CCodeInTheMiddle(0x141A4BFCC, 7,
+        WhenCheckingIfPlayerIsMovingBeforePerformingSortAndSelect_ForceRunIfHotkeyIsPressed, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }
 Vector2f RotateVector45DegreesLeft(Vector2f vec)
 {
@@ -84,8 +81,8 @@ Vector2f RotateVector45DegreesLeft(Vector2f vec)
 }
 
 using AlignedVec4 = __declspec(align(16)) Vector4f;
-DEFINE_GAME_FUNCTION(WindowEntryTester__InitializeForFrame_mb, 0x1401858D0, int, __fastcall, (ParkourTester_WindowEntry* a1, Vector4f* p_handsPosition, Vector4f* p_movementDirInGroundPlane, float p_WASDmagnitude, int p_eq6fullLean, __int64 p_currentLedge_mb));
-DEFINE_GAME_FUNCTION(FindMatchingParkourActionsForCurrentMovement_P, 0x140185630, __int64, __fastcall, (ParkourTester_WindowEntry* a1, Vector4f* p_handsPosition, Vector4f* p_towardWallCoplanarWithPlayerEntity, Vector4f* p_movementDirInGroundPlane, float p_WASDmagnitude, int p_eq6_fullLean, unsigned __int8 a7, __int64 p_currentLedge_mb, SmallArray<PotentialWindowEntry*>* p_arrayPotentialMovesOut));
+DEFINE_GAME_FUNCTION(WindowEntryTester__InitializeForFrame_mb, 0x140184DD0, int, __fastcall, (ParkourTester_WindowEntry* a1, Vector4f* p_handsPosition, Vector4f* p_movementDirInGroundPlane, float p_WASDmagnitude, int p_eq6fullLean, __int64 p_currentLedge_mb));
+DEFINE_GAME_FUNCTION(FindMatchingParkourActionsForCurrentMovement_P, 0x140184B30, __int64, __fastcall, (ParkourTester_WindowEntry* a1, Vector4f* p_handsPosition, Vector4f* p_towardWallCoplanarWithPlayerEntity, Vector4f* p_movementDirInGroundPlane, float p_WASDmagnitude, int p_eq6_fullLean, unsigned __int8 a7, __int64 p_currentLedge_mb, SmallArray<PotentialWindowEntry*>* p_arrayPotentialMovesOut));
 static void RunWindowEntryTesterInitAndScanForDirection(
     ParkourTester_WindowEntry& windowEntryTester
     , Vector4f& handsPosition
@@ -134,8 +131,6 @@ void WhenCheckingIfMovementMagnitudeIsNonzeroAndRunningWindowEntryScanner_ForceR
         return;
     }
 
-    // Requested to enter window if one is nearby.
-
     Vector2f playerForward = *(Vector2f*)towardWallCoplanarWithPlayerEntity;
     playerForward.normalize();
     Vector2f diagonalForwardLeft = RotateVector45DegreesLeft(playerForward);
@@ -162,10 +157,8 @@ void WhenCheckingIfMovementMagnitudeIsNonzeroAndRunningWindowEntryScanner_ForceR
     float fakeMovementMagnitude = 1;
     for (Vector4f& direction : directionsToScanExceptBelow)
     {
-        {
-            RunWindowEntryTesterInitAndScanForDirection(windowEntryTester, *handsPosition,
-                direction, fakeMovementMagnitude, p_eq6fullLean, currentLedge_mb, *towardWallCoplanarWithPlayerEntity, a7, arrayPotentialMovesOut);
-        }
+        RunWindowEntryTesterInitAndScanForDirection(windowEntryTester, *handsPosition,
+            direction, fakeMovementMagnitude, p_eq6fullLean, currentLedge_mb, *towardWallCoplanarWithPlayerEntity, a7, arrayPotentialMovesOut);
     }
     if (!arrayPotentialMovesOut.size)
     {
@@ -181,5 +174,7 @@ void WhenCheckingIfPlayerIsMovingBeforePerformingSortAndSelect_ForceRunIfHotkeyI
     bool& isMovingFlag = *(bool*)(params->rbp_ + 0xE0);
     const bool isRequestedEnterWindow = ACU::Input::IsPressed(g_Config.hacks->enterWindowsByPressingAButton->enterWindowsButton);
     if (isRequestedEnterWindow)
+    {
         isMovingFlag = true;
+    }
 }

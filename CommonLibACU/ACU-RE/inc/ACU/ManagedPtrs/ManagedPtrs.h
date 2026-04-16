@@ -11,7 +11,7 @@ SharedBlock& FindSharedBlockByObjectAndIncrementStrongRefcount(ManagedObject& ma
 
 
 
-SharedBlock* const g_emptySharedBlock = (SharedBlock*)0x14525BB58;
+SharedBlock* const g_emptySharedBlock = (SharedBlock*)0x14525DA98;
 
 namespace ACU {
 template<class ManagedObjectSubcls> class WeakRef;
@@ -41,7 +41,7 @@ public:
     bool IsEmpty() const { return &m_SharedBlock.get() == g_emptySharedBlock; }
 private:
     // In the game, the pointer to a shared block is never a `nullptr`.
-    // When a shared ptr is reset to "empty", it just points to `g_emptySharedBlock` (== 0x14525BB58).
+    // When a shared ptr is reset to "empty", it just points to `g_emptySharedBlock` (== 0x14525DA98).
     // It's an optimisation thing, I guess, to avoid nullptr-checking when increasing/decreasing the refcount.
     std::reference_wrapper<SharedBlock> m_SharedBlock;
     friend ACU::WeakRef<ManagedObjectSubcls>;
@@ -117,7 +117,7 @@ public:
     void Reset();
 private:
     // In the game, the pointer to a shared block is never a `nullptr`.
-    // When a shared ptr is reset to "empty", it just points to `g_emptySharedBlock` (== 0x14525BB58).
+    // When a shared ptr is reset to "empty", it just points to `g_emptySharedBlock` (== 0x14525DA98).
     // It's an optimisation thing, I guess, to avoid nullptr-checking when increasing/decreasing the refcount.
     std::reference_wrapper<SharedBlock> m_SharedBlock;
 };

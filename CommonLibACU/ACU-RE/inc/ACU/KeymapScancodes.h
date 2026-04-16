@@ -11,7 +11,7 @@ public:
 }; //Size: 0x0214
 assert_sizeof(RegisteredHotkey, 0x214);
 
-// == RDX at 0x14273BAC0
+// == RDX at 0x14273bb60
 class KeymapScancodes
 {
 public:

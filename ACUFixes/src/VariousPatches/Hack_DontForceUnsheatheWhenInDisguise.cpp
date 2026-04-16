@@ -33,7 +33,7 @@ std::optional<Vector3f> GetDisguiseTargetPosition()
     return disguiseTarget->GetPosition();
 }
 #include "ACU_DefineNativeFunction.h"
-DEFINE_GAME_FUNCTION(onEnterFight_canDisableUnsheathing_P, 0x1426582C0, __int64, __fastcall, (__int64 a1, __int64 a2, char a3));
+DEFINE_GAME_FUNCTION(onEnterFight_canDisableUnsheathing_P, 0x142658420, __int64, __fastcall, (__int64 a1, __int64 a2, char a3));
 
 bool IsPlayerInQuickshot()
 {
@@ -101,8 +101,8 @@ void WhenInCloseRangeDontForceUnsheathe(AllRegisters* params)
     *params->rax_ = onEnterFight_canDisableUnsheathing_P(params->rbp_, params->rsi_, params->r8_);
 }
 class SharedPtr_mb;
-DEFINE_GAME_FUNCTION(WhenDecidingIfAssassinationShouldBeDisallowed_Stage1ChaseVersion, 0x1404E90C0, char, __fastcall, (__int64 a1, SharedPtr_mb* a2, SharedPtr_mb* a3));
-DEFINE_GAME_FUNCTION(WhenDecidingIfAssassinationShouldBeDisallowed_Stage2ChaseVersion, 0x1404E9310, char, __fastcall, (__int64 a1, SharedPtr_mb* a2, SharedPtr_mb* a3));
+DEFINE_GAME_FUNCTION(WhenDecidingIfAssassinationShouldBeDisallowed_Stage1ChaseVersion, 0x1404E6E90, char, __fastcall, (__int64 a1, SharedPtr_mb* a2, SharedPtr_mb* a3));
+DEFINE_GAME_FUNCTION(WhenDecidingIfAssassinationShouldBeDisallowed_Stage2ChaseVersion, 0x1404E70E0, char, __fastcall, (__int64 a1, SharedPtr_mb* a2, SharedPtr_mb* a3));
 void WhenDecidingIfAssassinationShouldBeDisallowed_Stage1ChaseVersion_ForceAllowAssassination(AllRegisters* params)
 {
     if (IsShouldForceAllowAssassination())
@@ -123,23 +123,23 @@ void WhenDecidingIfAssassinationShouldBeDisallowed_Stage2ChaseVersion_ForceAllow
 }
 DontUnsheatheLikeAnIdiotWhileInDisguise::DontUnsheatheLikeAnIdiotWhileInDisguise()
 {
-    const uintptr_t whenCombatIsOngoingAndPlayerGetsCloseEnoughToUnsheathe = 0x14265D16B;
-    const uintptr_t returnToAfterTheOriginalCallIsMade = 0x14265D170;
+    const uintptr_t whenCombatIsOngoingAndPlayerGetsCloseEnoughToUnsheathe = 0x14265D2CB;
+    const uintptr_t returnToAfterTheOriginalCallIsMade = 0x14265D2D0;
     const bool dontExecuteStolenBytes = false;
     PresetScript_CCodeInTheMiddle(
         whenCombatIsOngoingAndPlayerGetsCloseEnoughToUnsheathe, 5
         , WhenInCloseRangeDontForceUnsheathe, returnToAfterTheOriginalCallIsMade, dontExecuteStolenBytes);
 
-    const uintptr_t whenDecidingIfAssassinationsShouldBeDisallowed_stage1chase = 0x140CD9BED;
+    const uintptr_t whenDecidingIfAssassinationsShouldBeDisallowed_stage1chase = 0x140CD96CD;
     PresetScript_CCodeInTheMiddle(
         whenDecidingIfAssassinationsShouldBeDisallowed_stage1chase, 5
         , WhenDecidingIfAssassinationShouldBeDisallowed_Stage1ChaseVersion_ForceAllowAssassination, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
-    const uintptr_t whenDecidingIfAssassinationsShouldBeDisallowed_stage2chase = 0x140CD9C95;
+    const uintptr_t whenDecidingIfAssassinationsShouldBeDisallowed_stage2chase = 0x140CD9775;
     PresetScript_CCodeInTheMiddle(
         whenDecidingIfAssassinationsShouldBeDisallowed_stage2chase, 5
         , WhenDecidingIfAssassinationShouldBeDisallowed_Stage2ChaseVersion_ForceAllowAssassination, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 
-    const uintptr_t whenPlaySoundConflictStart = 0x1410CEB60;
+    const uintptr_t whenPlaySoundConflictStart = 0x1410CEB80;
     PresetScript_CCodeInTheMiddle(
         whenPlaySoundConflictStart, 7,
         WhenPlaySoundConflictStart_RememberTime, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);

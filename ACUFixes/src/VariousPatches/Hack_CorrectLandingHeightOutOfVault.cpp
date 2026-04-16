@@ -8,7 +8,7 @@
 #include "ParkourDebugging/AvailableParkourAction.h"
 
 
-DEFINE_GAME_FUNCTION(AtomGraph_RTCP__SetRTCP4Bytes, 0x1400A3A30, void, __fastcall, (AtomGraph_RTCP* a1, unsigned int p_rtcpVarIdx, GraphEvaluation_400* a3, float* p_value));
+DEFINE_GAME_FUNCTION(AtomGraph_RTCP__SetRTCP4Bytes, 0x1400A3660, void, __fastcall, (AtomGraph_RTCP* a1, unsigned int p_rtcpVarIdx, GraphEvaluation_400* a3, float* p_value));
 void WhenInitiatingVault_SetRTCP_TargetHeight_theSameAs_LandingHeight(AllRegisters* params)
 {
     /*
@@ -34,7 +34,8 @@ void WhenInitiatingVault_SetRTCP_TargetHeight_theSameAs_LandingHeight(AllRegiste
     float rtcpValue_LandingHeight = *(float*)(params->GetRSP() + 0xE0);
     auto SetRTCPFloat = [&](uint32 hash, float value) {
         uint32* rtcpIdx = graphEval.rtcp->atomGraphVarsHashmap.Get(hash);
-        if (!rtcpIdx) return;
+        if (!rtcpIdx)
+            return;
         AtomGraph_RTCP__SetRTCP4Bytes(graphEval.rtcp, *rtcpIdx, &graphEval.stru400, &value);
         };
     SetRTCPFloat(rtcpHash_TargetHeight, rtcpValue_LandingHeight);
@@ -49,6 +50,6 @@ void WhenInitiatingVault_SetRTCP_TargetHeight_theSameAs_LandingHeight(AllRegiste
 
 CorrectLandingHeightOutOfVault::CorrectLandingHeightOutOfVault()
 {
-    PresetScript_CCodeInTheMiddle(0x140195FF4, 8,
+    PresetScript_CCodeInTheMiddle(0x140195D54, 8,
         WhenInitiatingVault_SetRTCP_TargetHeight_theSameAs_LandingHeight, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

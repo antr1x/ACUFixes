@@ -6,7 +6,7 @@
 template<typename VarType>
 void SetGraphVariable(GraphEvaluation& graphEvaluation, uint32 varnameHash, VarType newValue)
 {
-    // See example usage at 0x1419C8204, where the graph variable
+    // See example usage at 0x1419c7c34, where the graph variable
     // `animationref CinematicAnimation; // 0x7ad472e5/2060743397`
     // is being set.
     uint32* pGraphVarIndex = graphEvaluation.rtcp->atomGraphVarsHashmap.Get(varnameHash);

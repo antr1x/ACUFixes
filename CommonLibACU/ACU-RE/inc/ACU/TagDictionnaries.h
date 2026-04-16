@@ -37,6 +37,6 @@ public:
 	char pad_0030[8]; //0x0030
 
 	// @helper_functions
-	static TagDictionnaries* GetSingleton() { return *(TagDictionnaries**)0x145217370; }
+	static TagDictionnaries* GetSingleton() { return *(TagDictionnaries**)0x1452192E0; }
 }; //Size: 0x0038
 assert_sizeof(TagDictionnaries, 0x38);

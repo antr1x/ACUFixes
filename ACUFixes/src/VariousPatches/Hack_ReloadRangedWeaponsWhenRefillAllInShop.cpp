@@ -7,7 +7,7 @@
 
 WeaponComponent* GetWeaponComponent(Entity& entity)
 {
-    constexpr uint64 WeaponComponent__VTable = 0x142F01050;
+    constexpr uint64 WeaponComponent__VTable = 0x142F020E0;
     return (WeaponComponent*)(entity.FindComponentByVTBL(WeaponComponent__VTable));
 }
 void ReloadAllRangedWeapons()
@@ -35,7 +35,7 @@ void WhenRefillAllInShop_AlsoReloadWeapons(AllRegisters* params)
 }
 ReloadRangedWeaponsWhenRefillAllInShop::ReloadRangedWeaponsWhenRefillAllInShop()
 {
-    uintptr_t whenRefillAllInShop = 0x140D37B50;
+    uintptr_t whenRefillAllInShop = 0x140D37880;
     PresetScript_CCodeInTheMiddle(whenRefillAllInShop, 5,
         WhenRefillAllInShop_AlsoReloadWeapons, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

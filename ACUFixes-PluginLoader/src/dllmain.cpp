@@ -2,9 +2,9 @@
 
 #include "base.h"
 #include "MyLog.h"
+#include "PluginLoader.h"
 #include "PluginLoaderConfig.h"
 #include "PresentHookOuter.h"
-#include "EarlyHooks/ThreadOperations.h"
 
 #define LOG_FILENAME THIS_DLL_PROJECT_NAME ".log"
 
@@ -13,13 +13,11 @@ fs::path AbsolutePathInMyDirectory(const fs::path& filenameRel);
 void InstallCrashLog();
 std::optional<MyLogFileLifetime> g_LogLifetime;
 void ClearThe_BeingDebugged_Flag();
+LRESULT CALLBACK WndProc_HackControls(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 void PluginLoader_VariousHooks_Start();
-void PluginLoader_FirstTimeGatherPluginsAndCheckCompatibility();
-void PluginLoader_WhenSafeToApplyCodePatches();
 
 bool g_IsReadyToStart_PluginsInitialLoadAndVersionCheck = false;
-bool g_IsFinished_PluginsInitialLoadAndVersionCheck = false;
 bool g_IsMICDisabled = false;
 void WaitUntilMICIsDisabled();
 bool g_IsPluginLoaderFullyInitialized = false;
@@ -28,14 +26,14 @@ void StartupTasksAndHeartbeat()
 {
     while (!g_IsReadyToStart_PluginsInitialLoadAndVersionCheck)
         Sleep(500);
-    PluginLoader_FirstTimeGatherPluginsAndCheckCompatibility();
-    g_IsFinished_PluginsInitialLoadAndVersionCheck = true;
     WaitUntilMICIsDisabled();
+
+    PluginLoader_FirstTimeGatherPluginsAndCheckCompatibility();
     PluginLoader_VariousHooks_Start();
     PluginLoader_WhenSafeToApplyCodePatches();
 
-    PresentHookOuter::BasehookSettings_PresentHookOuter basehook;
     Base::Fonts::SetFontSize(g_PluginLoaderConfig.fontSize);
+    PresentHookOuter::BasehookSettings_PresentHookOuter basehook;
     Base::Start(basehook);
     g_IsPluginLoaderFullyInitialized = true;
     while (!Base::Data::Detached)
@@ -105,10 +103,6 @@ void WaitAndShowMessageBoxesIfTakingTooLong(const std::string_view& taskDescript
         Sleep(500);
     }
 }
-void WaitForInitialLoadingOfPluginsToFinish()
-{
-    WaitAndShowMessageBoxesIfTakingTooLong("Waiting to finish plugins' initial loading and version check.", []() { return g_IsFinished_PluginsInitialLoadAndVersionCheck; });
-}
 void WaitForFinishedPluginInit()
 {
     WaitAndShowMessageBoxesIfTakingTooLong("Waiting for the plugins to finish loading.", []() { return g_IsPluginLoaderFullyInitialized; });
@@ -124,22 +118,19 @@ void WhenReadyForInitialLoadingOfPlugins()
     g_IsReadyToStart_PluginsInitialLoadAndVersionCheck = true;
 }
 #include "ACU/Threads/KnownThreads.h"
-void BeforeGameMainThreadStarted_HookTheStartAddress();
 bool IsCompatibleGameVersion()
 {
     // I check some bytes at the start of the Main Thread's code.
     // I don't have other game versions, but I trust their entry points ought to be different.
     void* mainThreadStart_Addr = (void*)ACU::Threads::ThreadStartAddr_MainThread;
     unsigned char mainThreadStart_Bytes[] = {
-        0xE9, 0x0B, 0x25, 0x00, 0x00, 0xE9, 0x34, 0x37,
-        0xDF, 0xFE, 0xE9, 0x0A, 0x87, 0xC4, 0xFE, 0x69,
-        0xD2, 0x0A, 0x00, 0x00, 0x00, 0x66, 0x85, 0xE9,
-        0xF6, 0xC1, 0x03, 0x01, 0xC2, 0xE9, 0x96, 0x74
+        0xE8, 0xC8, 0x93, 0x6E, 0x01, 0x6F
     };
     constexpr std::size_t numBytesToRead = std::size(mainThreadStart_Bytes);
     std::array<char, numBytesToRead> buf{ 0 };
     SIZE_T numBytesRead{};
-    if (!ReadProcessMemory(GetCurrentProcess(), (void*)mainThreadStart_Addr, &buf[0], numBytesToRead, &numBytesRead)) return false;
+    if (!ReadProcessMemory(GetCurrentProcess(), (void*)mainThreadStart_Addr, &buf[0], numBytesToRead, &numBytesRead))
+        return false;
     return (std::array<char, numBytesToRead>&)mainThreadStart_Bytes == buf;
 }
 BOOL DllMainOnProcessAttach(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
@@ -148,7 +139,7 @@ BOOL DllMainOnProcessAttach(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     {
         MessageBoxA(NULL,
             "Game version is incompatible.\n"
-            "Assassin's Creed Unity Version 1.5.0 is required.\n"
+            "Assassin's Creed Unity Version 1.5.1 is required.\n"
             "The mod will not start.\n"
             , THIS_DLL_PROJECT_NAME,
             MB_OK |
@@ -161,24 +152,13 @@ BOOL DllMainOnProcessAttach(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
     PluginLoaderConfig::FindAndLoadConfigFileOrCreateDefault();
     InstallCrashLog();
 
-
-    CreateThread(nullptr, 0, PluginLoaderThread_StartupTasksAndHeartbeat, hModule, 0, nullptr);
-
-
-    const bool isInMainThread = GetThreadStartAddress(GetCurrentThread()) == ACU::Threads::ThreadStartAddr_MainThread;
-    const bool isEarlyHooksPossible = isInMainThread;
-    if (isEarlyHooksPossible)
+    HANDLE startupThread = CreateThread(nullptr, 0, PluginLoaderThread_StartupTasksAndHeartbeat, hModule, 0, nullptr);
+    if (!startupThread)
     {
-        // Do multistage plugin initialization, with possible early hooks
-        // between the point the main thread starts and the point the main integrity check is disabled.
-        BeforeGameMainThreadStarted_HookTheStartAddress();
+        return FALSE;
     }
-    else
-    {
-        // Too late to install early hooks, don't bother trying.
-        // Just load the plugins without blocking the main thread.
-        WhenReadyForInitialLoadingOfPlugins();
-    }
+    CloseHandle(startupThread);
+    WhenReadyForInitialLoadingOfPlugins();
     return TRUE;
 }
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)

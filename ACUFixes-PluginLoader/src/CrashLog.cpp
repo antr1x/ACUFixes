@@ -411,7 +411,7 @@ LONG _stdcall CrashLogVectoredExceptionHandler(::EXCEPTION_POINTERS* exception) 
     {
         LogVEHException(*exception);
     }
-    // Returns `0x14290BCF4`.
+    // Returns `0x14290c574`.
     // I cannot set the SEH _as_soon_as_ the mod is injected,
     // because my handler gets removed by the game.
     // This is why I set it from VEH, which does not get removed and triggers before SEH.

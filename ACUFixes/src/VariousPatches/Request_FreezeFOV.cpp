@@ -23,7 +23,7 @@ void WhenSettingFOVforFrame_Override(AllRegisters* params)
 }
 FreezeFOV::FreezeFOV()
 {
-    uintptr_t whenSettingFOVforFrame = 0x141F3FE3B;
+    uintptr_t whenSettingFOVforFrame = 0x141F402DB;
     PresetScript_CCodeInTheMiddle(whenSettingFOVforFrame, 6,
         WhenSettingFOVforFrame_Override, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 }

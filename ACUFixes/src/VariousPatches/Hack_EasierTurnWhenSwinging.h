@@ -13,7 +13,7 @@ struct EasierTurnWhenSwinging : AutoAssemblerCodeHolder_Base
 };
 EasierTurnWhenSwinging::EasierTurnWhenSwinging()
 {
-    DEFINE_ADDR(whenChoosingAvailableParkourActionsReadPriorityForTheSwingTurn, 0x14014E40E);
+    DEFINE_ADDR(whenChoosingAvailableParkourActionsReadPriorityForTheSwingTurn, 0x14014F20E);
 
     // Instead of reading `2.0f` from 142E77F80, I read `4.0f` from 142E77F98
     whenChoosingAvailableParkourActionsReadPriorityForTheSwingTurn = {

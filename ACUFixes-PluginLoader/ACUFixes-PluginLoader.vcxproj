@@ -209,6 +209,7 @@ if exist "$(ProjectDir)copy_output_to_directory.txt" (
     <ClInclude Include="src\PluginLoader_VariousHooks\Input\Hack_GameRawInputHook.h" />
     <ClInclude Include="src\ImGuiConfigUtils.h" />
     <ClInclude Include="src\MyLog.h" />
+    <ClInclude Include="src\Memory\PatternScanner.h" />
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\PluginLoaderConfig.h" />
     <ClInclude Include="src\PresentHookOuter.h" />
@@ -227,6 +228,7 @@ if exist "$(ProjectDir)copy_output_to_directory.txt" (
     <ClCompile Include="src\CrashLog.cpp" />
     <ClCompile Include="src\DisableIntegrityChecks.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\Memory\PatternScanner.cpp" />
     <ClCompile Include="src\PluginLoader_VariousHooks\Animation\AnimationModdingInterface_impl.cpp" />
     <ClCompile Include="src\PluginLoader_VariousHooks\Input\InputHook.cpp" />
     <ClCompile Include="src\MyLog.cpp" />

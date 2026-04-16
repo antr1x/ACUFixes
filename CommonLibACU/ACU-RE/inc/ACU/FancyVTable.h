@@ -26,12 +26,12 @@ Things discovered:
 - Not all "fancy vtables" have the same length.
   - Seems like all subclasses of AvailableParkourAction have a `fancyVTable` at offset 8 containing 0x78 "fancy vfunctions".
     Examples:
-        0x143A47FA0         // dive, mb?
-        0x143A4E1D0         // swing turn
-        0x143A13130         // descent from wall to ground; also sidehop
+        0x143a4a140         // dive, mb?
+        0x143a50370         // swing turn
+        0x143a16af0         // descent from wall to ground; also sidehop
   - Seems like all "Human State Nodes" (subclasses of `FunctorBase`) have tables at offset 0x18 containing 0x357 "fancy vfunctions"
     Examples:
-        0x14496B420         // Functor_Quickshot::FancyVTable
+        0x144973f90         // Functor_Quickshot::FancyVTable
 
 
 

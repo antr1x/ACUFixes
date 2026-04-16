@@ -94,11 +94,11 @@ with his melee weapon out.
 */
 WhistleAbility::WhistleAbility()
 {
-    uintptr_t whenCheckingIfLineOfSightIsNotToNPCsOcciput = 0x1412234F5;
+    uintptr_t whenCheckingIfLineOfSightIsNotToNPCsOcciput = 0x141222FC5;
     PresetScript_CCodeInTheMiddle(
         whenCheckingIfLineOfSightIsNotToNPCsOcciput, 8,
         WhenCheckingIfLineOfSightIsNotToNPCsOcciput_AllowNPCsSeeingFromOutTheBackOfTheHeadAndThroughWalls, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t onReactionHandlerRespondsToWitnessEvent = 0x140ED2450;
+    uintptr_t onReactionHandlerRespondsToWitnessEvent = 0x140ED1E30;
     PresetScript_CCodeInTheMiddle(
         onReactionHandlerRespondsToWitnessEvent, 5,
         OnReactionHandlerRespondsToWitnessEvent_ChangeWitnessEventToAlertGuards, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
@@ -118,10 +118,10 @@ ReactionHandler* GetReactionHandler(Entity& highlightedNPC)
     return bhv->characterAI_toHealthAndInventory->reactionHandler;
 }
 
-//DEFINE_GAME_FUNCTION(Statechart__TransitionToState_mb_StatechartLoop_PP, 0x14275DD60, void, __fastcall, (Statechart* a1, __int64 p_stateID_mb, __int64 a3, __int64 a4));
-//DEFINE_GAME_FUNCTION(ReactionHandler__BeforeYellowIconAppears, 0x140ED6070, void, __fastcall, (ReactionHandler* a1));
-//DEFINE_GAME_FUNCTION(WitnessEvent__ctor, 0x140BBE160, WitnessEvent*, __fastcall, (WitnessEvent* placeAt));
-//DEFINE_GAME_FUNCTION(AlertedParams__createsCLAlertedBeforeYellowIconAppears, 0x1401AB7E0, char, __fastcall, (AlertedParams* p_alertParams, Entity* p_npc, WitnessEvent* p_witnessEvn));
+//DEFINE_GAME_FUNCTION(Statechart__TransitionToState_mb_StatechartLoop_PP, 0x14275DC40, void, __fastcall, (Statechart* a1, __int64 p_stateID_mb, __int64 a3, __int64 a4));
+//DEFINE_GAME_FUNCTION(ReactionHandler__BeforeYellowIconAppears, 0x140ED5B20, void, __fastcall, (ReactionHandler* a1));
+//DEFINE_GAME_FUNCTION(WitnessEvent__ctor, 0x140BBD990, WitnessEvent*, __fastcall, (WitnessEvent* placeAt));
+//DEFINE_GAME_FUNCTION(AlertedParams__createsCLAlertedBeforeYellowIconAppears, 0x1401AB4B0, char, __fastcall, (AlertedParams* p_alertParams, Entity* p_npc, WitnessEvent* p_witnessEvn));
 
 #include "ACU/SharedPtr.h"
 #include "ACU/Entity.h"
@@ -132,13 +132,13 @@ struct HasNPCEntity
     Entity* npc;
 };
 assert_offsetof(HasNPCEntity, npc, 0x28);
-DEFINE_GAME_FUNCTION(createsWitnessEventUnsheatheHash_d_whenUnsheatheBeforeGuard, 0x14122D420, char, __fastcall, (HasNPCEntity* a1, SharedPtrNew<Entity>** rdx0));
-DEFINE_GAME_FUNCTION(SharedPtr_copy_mb, 0x140152950, SharedPtrAndSmth*, __fastcall, (SharedPtrAndSmth* p_out, SharedPtrNew<Entity>* p_shared));
+DEFINE_GAME_FUNCTION(createsWitnessEventUnsheatheHash_d_whenUnsheatheBeforeGuard, 0x14122CFE0, char, __fastcall, (HasNPCEntity* a1, SharedPtrNew<Entity>** rdx0));
+DEFINE_GAME_FUNCTION(SharedPtr_copy_mb, 0x140151D90, SharedPtrAndSmth*, __fastcall, (SharedPtrAndSmth* p_out, SharedPtrNew<Entity>* p_shared));
 
 // This can make the guard react as if you're having your melee weapon out,
 // but not if they can't see you. Even with the "see through walls" hack continuously active
 // no reaction is produced if they can't see you, no response hash of "0x8315F5D1"
-// reaches the ReactionHandler at 0x140ED2450.
+// reaches the ReactionHandler at 0x140ED1E30.
 void TryDispatchWitnessEvent_UnsheathedMelee()
 {
     BhvAssassin* bhv = ACU::GetPlayerBhvAssassin();

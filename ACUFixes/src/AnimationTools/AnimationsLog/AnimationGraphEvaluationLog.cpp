@@ -57,7 +57,7 @@ void WhenJustRetrievedAnimationForNewlyInitializedAnimationDataNode_DoLog(AllReg
 
 AnimGraphEvaluationLogging::AnimGraphEvaluationLogging()
 {
-    uintptr_t whenJustRetrievedAnimationForNewlyInitializedAnimationDataNode = 0x1400EA0F9;
+    uintptr_t whenJustRetrievedAnimationForNewlyInitializedAnimationDataNode = 0x1400E9779;
     PresetScript_CCodeInTheMiddle(whenJustRetrievedAnimationForNewlyInitializedAnimationDataNode, 6,
         WhenJustRetrievedAnimationForNewlyInitializedAnimationDataNode_DoLog, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

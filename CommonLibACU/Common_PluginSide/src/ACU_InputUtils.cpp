@@ -9,8 +9,8 @@
 
 
 
-DEFINE_GAME_FUNCTION(InputContainer__IsLongPressJustHappened, 0x1427202B0, char, __fastcall, (InputContainer* a1, ActionKeyCode p_actionKeyCode, float p_testHowLong, __int64 a4));
-DEFINE_GAME_FUNCTION(InputContainer__IsJustShortPressed, 0x142720530, bool, __fastcall, (InputContainer* a1, ActionKeyCode a2, float p_noLongerThanThis, __int64 p_is0forShortPressCheck));
+DEFINE_GAME_FUNCTION(InputContainer__IsLongPressJustHappened, 0x142720450, char, __fastcall, (InputContainer* a1, ActionKeyCode p_actionKeyCode, float p_testHowLong, __int64 a4));
+DEFINE_GAME_FUNCTION(InputContainer__IsJustShortPressed, 0x142720700, bool, __fastcall, (InputContainer* a1, ActionKeyCode a2, float p_noLongerThanThis, __int64 p_is0forShortPressCheck));
 
 
 namespace ACU::Input {
@@ -21,7 +21,7 @@ InputContainerBig* Get_InputContainerBig()
 }
 bool IsPressed(BindableKeyCode_Keyboard keycode)
 {
-    return ACU::Input::Get_InputContainerBig()->isPressed_byScancode[(uint32)keycode];
+    return g_InputHooksSingletonPtr->IsPressed((uint8)keycode);
 }
 bool IsPressed(BindableKeyCode keycode)
 {
@@ -82,7 +82,7 @@ bool IsJustReleased(BindableKeyCode keycode)
 }
 bool IsPressed(MouseButton mouseBtn)
 {
-    return ACU::Input::Get_InputContainerBig()->mouseState.mouseButtonStates[(uint32)mouseBtn];
+    return g_InputHooksSingletonPtr->IsPressed(mouseBtn);
 }
 bool IsPressed(ActionKeyCode actionKey)
 {

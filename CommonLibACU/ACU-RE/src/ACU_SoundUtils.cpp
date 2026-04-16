@@ -2,7 +2,7 @@
 
 #include "ACU/Sound/ACU_SoundUtils.h"
 #include "ACU_DefineNativeFunction.h"
-DEFINE_GAME_FUNCTION(DispatchSoundEvent_mb, 0x1401859B0, void, __fastcall, (SoundInstance* p_soundInstance, Entity* p_sourceEntity_mb));
+DEFINE_GAME_FUNCTION(DispatchSoundEvent_mb, 0x140184EB0, void, __fastcall, (SoundInstance* p_soundInstance, Entity* p_sourceEntity_mb));
 
 namespace ACU::Sound {
 

@@ -5,7 +5,7 @@
 #include "ACU/ACUGetSingletons.h"
 #include "ACU_DefineNativeFunction.h"
 
-DEFINE_GAME_FUNCTION(World__SetUnpausedGameTimescale_onSlowMotion, 0x141D5E210, void, __fastcall, (World* world, float newTimescale));
+DEFINE_GAME_FUNCTION(World__SetUnpausedGameTimescale_onSlowMotion, 0x141D5DEC0, void, __fastcall, (World* world, float newTimescale));
 void ACUSetTimescaleInGameClock(float newTimescale)
 {
     World* world = World::GetSingleton();
@@ -146,7 +146,7 @@ SlowMotionManager g_SlowmotionManager;
 #include "Common_Plugins/ACU_InputUtils.h"
 #include "ACU/Sound/ACU_SoundUtils.h"
 #include "ACU/SoundEvent.h"
-DEFINE_GAME_FUNCTION(SoundInstance__ctor_0, 0x141C79760, SoundInstance*, __fastcall, (SoundInstance* placeAt));
+DEFINE_GAME_FUNCTION(SoundInstance__ctor_0, 0x141C79500, SoundInstance*, __fastcall, (SoundInstance* placeAt));
 void PlaySoundFromPlayer(SoundID soundID)
 {
     Entity* player = ACU::GetPlayer();
@@ -209,12 +209,16 @@ public:
             {
                 return;
             }
-            if (ACU::Input::IsPressed(g_Config.hacks->slowmotionTrick->hotkey))
+            if (ACU::Input::IsPressed(g_Config.hacks->slowmotionTrick->hotkey.get()))
             {
-                PlaySoundSlowmotionStart();
-                g_SlowmotionManager.PlayTimecurve_SmoothTransition(slowmoPhaseTargetTimescale, easeInDuration);
+                Clock* currentClock = ACU::GetClock_InGameWithoutSlowmotion();
+                if (!currentClock) { return; }
+                m_InGameClockWithoutSlowmotion = currentClock;
 
-                m_CurrentState = State_Activated{ GetCurrentTimestampIgnoreSlowmotion() };
+                PlaySoundSlowmotionStart();
+                g_GameSlowmotionRawControls.SetTimescale(slowmoPhaseTargetTimescale);
+
+                m_CurrentState = State_Activated{ currentClock->GetCurrentTimeFloat() };
             }
             return;
         }
@@ -243,7 +247,16 @@ private:
     bool IsClockChanged_NeedToReset()
     {
         Clock* currentClock = ACU::GetClock_InGameWithoutSlowmotion();
-        if (currentClock == m_InGameClockWithoutSlowmotion && currentClock != nullptr)
+        if (!currentClock)
+        {
+            return false;
+        }
+        if (!m_InGameClockWithoutSlowmotion)
+        {
+            m_InGameClockWithoutSlowmotion = currentClock;
+            return false;
+        }
+        if (currentClock == m_InGameClockWithoutSlowmotion)
         {
             return false;
         }

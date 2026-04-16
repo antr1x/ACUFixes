@@ -10,7 +10,7 @@
 HUDLetterReaderModule* FindHUDLetterReaderModule(UIWorldComponent& uiWorldCpnt)
 {
     using vtbl_t = uint64;
-    constexpr vtbl_t hudLetterReaderModuleVTBL = 0x142ED07C0;
+    constexpr vtbl_t hudLetterReaderModuleVTBL = 0x142ED1A10;
     for (HUDModule* hudModule : uiWorldCpnt.hudModules)
     {
         vtbl_t hudModuleVtbl = *(vtbl_t*)hudModule;
@@ -25,7 +25,7 @@ HUDLetterReaderModule* FindHUDLetterReaderModule(UIWorldComponent& uiWorldCpnt)
 HUDQuickSelectModule* FindHUDQuickSelectModule(UIWorldComponent& uiWorldCpnt)
 {
     using vtbl_t = uint64;
-    constexpr vtbl_t hudQuickSelectModuleVTBL = 0x142ED8B70;
+    constexpr vtbl_t hudQuickSelectModuleVTBL = 0x142ED9DB0;
     for (HUDModule* hudModule : uiWorldCpnt.hudModules)
     {
         vtbl_t hudModuleVtbl = *(vtbl_t*)hudModule;
@@ -141,7 +141,7 @@ CSrvPlayerWeaponSwitch* FindPlayerWeaponSwitch()
     if (!charAI) { return nullptr; }
 
     using vtbl_t = uint64;
-    constexpr vtbl_t CSrvPlayerWeaponSwitch_VTBL = 0x142F59810;
+    constexpr vtbl_t CSrvPlayerWeaponSwitch_VTBL = 0x142F5A6F0;
     for (Statechart* stc : charAI->childStatecharts_mb_toHealth_60)
     {
         if (!stc) { continue; }
@@ -179,7 +179,7 @@ HUDQuickSelectComponent* FindHUDQuickSelectComponent(HUDQuickSelectModule& qsMod
     if (qsModule.p_84.size <= 0) { return nullptr; }
     Entity* qsCpntHolder = qsModule.p_84[0]->GetPtr();
     if (!qsCpntHolder) { return nullptr; }
-    constexpr uint64 qsCpntVTBL = 0x142ED86D0;
+    constexpr uint64 qsCpntVTBL = 0x142ED9910;
     Component* qsCpnt = qsCpntHolder->FindComponentByVTBL(qsCpntVTBL);
     if (!qsCpnt) { return nullptr; }
     return static_cast<HUDQuickSelectComponent*>(qsCpnt);
@@ -288,13 +288,13 @@ void WhenAttemptedToQuickSelectEquipment_SaveSelection(AllRegisters* params)
 }
 InputInjection_CycleEquipmentWhenScrollingMousewheel::InputInjection_CycleEquipmentWhenScrollingMousewheel()
 {
-    constexpr uintptr_t whenCheckingKeymapForFrame = 0x14273BC75;
+    constexpr uintptr_t whenCheckingKeymapForFrame = 0x14273BD15;
     PresetScript_CCodeInTheMiddle(
         whenCheckingKeymapForFrame, 6
         , CycleEquipmentByScrollingMousewheel_BombsOnly
         , RETURN_TO_RIGHT_AFTER_STOLEN_BYTES
         , true);
-    constexpr uintptr_t whenAttemptedToQuickSelectEquipment = 0x14082EB9A;
+    constexpr uintptr_t whenAttemptedToQuickSelectEquipment = 0x14082E42A;
     PresetScript_CCodeInTheMiddle(whenAttemptedToQuickSelectEquipment, 5
         , WhenAttemptedToQuickSelectEquipment_SaveSelection, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

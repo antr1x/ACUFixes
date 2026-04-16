@@ -4,7 +4,7 @@
 
 NoWaitForUnsafeEject::NoWaitForUnsafeEject()
 {
-    uintptr_t whenWhileOnWallSystemIsCreated_setWaitDurationForUnsafeEject = 0x141A4DE9B;
+    uintptr_t whenWhileOnWallSystemIsCreated_setWaitDurationForUnsafeEject = 0x141A4D28B;
     DEFINE_ADDR(whenWhileOnWallSystemIsCreated_setWaitDurationForUnsafeEject_InlineFloat4bytes,
         whenWhileOnWallSystemIsCreated_setWaitDurationForUnsafeEject + 6);
     whenWhileOnWallSystemIsCreated_setWaitDurationForUnsafeEject_InlineFloat4bytes = {

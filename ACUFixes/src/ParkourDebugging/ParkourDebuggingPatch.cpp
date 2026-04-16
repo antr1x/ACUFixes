@@ -432,7 +432,7 @@ static void PopStyleCompact()
 }
 void WhenPerformingFinalFilter1OnSortedMoves_ForceTurnInPalaisDeLuxembourgCorners(AllRegisters* params)
 {
-    DEFINE_GAME_FUNCTION(AvailableParkourAction__FinalFilter1, 0x1401D4DE0, bool, __fastcall, (AvailableParkourAction* p_parkourAction, __m128* a2, uint64 a3, Entity* p_playerEntity));
+    DEFINE_GAME_FUNCTION(AvailableParkourAction__FinalFilter1, 0x1401D4360, bool, __fastcall, (AvailableParkourAction* p_parkourAction, __m128* a2, uint64 a3, Entity* p_playerEntity));
     AvailableParkourAction* parkourAction = (AvailableParkourAction*)params->rcx_;
     Entity* ent = (Entity*)params->r9_;
     uint64 result = AvailableParkourAction__FinalFilter1(parkourAction, (__m128*)params->rdx_, params->r8_, ent);
@@ -840,7 +840,7 @@ static auto ImGuiEditDirectionAsAngles(Vector3f& dir, auto&& callableOnAngles) {
     return result;
 }
 #include "ACU/Human.h"
-DEFINE_GAME_FUNCTION(Human__Dispatch_HSTE_ResetBehavior, 0x14131A530, char, __fastcall, (Human* a1));
+DEFINE_GAME_FUNCTION(Human__Dispatch_HSTE_ResetBehavior, 0x141319F60, char, __fastcall, (Human* a1));
 static void ResetPlayer()
 {
     if (auto* human = Human::GetForPlayer())

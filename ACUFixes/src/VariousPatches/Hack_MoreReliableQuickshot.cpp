@@ -38,7 +38,7 @@ static bool BetterQuickshot_IsShouldAllowToProceedWithoutReholstering_Player(int
     const bool isStillAllowedToQuickshotTwohandedMelee = !IsPlayerParkouringBothHandsBusy();
     return isStillAllowedToQuickshotTwohandedMelee;
 }
-DEFINE_GAME_FUNCTION(ReattachWeaponToSheathOrHolster, 0x141B05570, void, __fastcall, (__int64 a1, int p_1melee2ranged));
+DEFINE_GAME_FUNCTION(ReattachWeaponToSheathOrHolster, 0x141B04910, void, __fastcall, (__int64 a1, int p_1melee2ranged));
 bool WhenInstantSheathingOrReholstering_IsShouldProceedWithoutReholstering(Entity* ownerEntity, int p_1melee2ranged)
 {
     const bool isPlayer = ownerEntity && ownerEntity == ACU::GetPlayer();
@@ -95,10 +95,10 @@ bool IsPlayerParkouringBothHandsBusy()
         return false;
     }
     if (!navigationCallbacks->callbacksWithReceivers.size) { return false; }
-    uint64 WhileOnWallSystem_VTable = 0x142FFC970;
-    uint64 WhileInVerticalWallrun_VTable = 0x142FFCAA8;
-    uint64 WhileInSwingHang_VTable = 0x142FFCB20;
-    uint64 WhileInLeap_VTable = 0x142FFD1E0;
+    uint64 WhileOnWallSystem_VTable = 0x142FFDB30;
+    uint64 WhileInVerticalWallrun_VTable = 0x142FFDC68;
+    uint64 WhileInSwingHang_VTable = 0x142FFDCE0;
+    uint64 WhileInLeap_VTable = 0x142FFE380;
     uint64 currentParkourModeVTable = *(uint64*)(navigationCallbacks->callbacksWithReceivers[0].humanStateNode);
     return currentParkourModeVTable == WhileOnWallSystem_VTable
         || currentParkourModeVTable == WhileInVerticalWallrun_VTable
@@ -175,7 +175,7 @@ void PlayerHasJustEnteredQuickshot(Functor_Quickshot& functorQS)
 {
     g_PlayerQuickshot.emplace(functorQS);
 }
-DEFINE_GAME_FUNCTION(HumanStatesHolder__canUnglueWristbow, 0x141AFAE60, void, __fastcall, (HumanStatesHolder* a1, Entity* a2, __int64 p_0));
+DEFINE_GAME_FUNCTION(HumanStatesHolder__canUnglueWristbow, 0x141AFA200, void, __fastcall, (HumanStatesHolder* a1, Entity* a2, __int64 p_0));
 void TryToCleanUpQuickshotAnimationToPreventArmOutstretchedBug()
 {
     HumanStatesHolder* humanStates = HumanStatesHolder::GetForPlayer();
@@ -362,8 +362,8 @@ void WhenCheckingIfTimerToEndQuickshotIsActive_ReactivateIfRecentlyFailed(AllReg
     }
 }
 void WhenGettingRangedWeaponTarget_onWallInJumpEtc_ForceScan(AllRegisters* params);
-DEFINE_GAME_FUNCTION(sub_141B034A0, 0x141B034A0, char, __fastcall, (FunctorBase* a1, FunctorBase* a2));
-DEFINE_GAME_FUNCTION(sub_1419FA390, 0x1419FA390, char, __fastcall, (HumanStatesHolder* p_humanStates, unsigned int edx0, __int64 a3));
+DEFINE_GAME_FUNCTION(sub_141B034A0, 0x141B02840, char, __fastcall, (FunctorBase* a1, FunctorBase* a2));
+DEFINE_GAME_FUNCTION(sub_1419FA390, 0x1419f8910, char, __fastcall, (HumanStatesHolder* p_humanStates, unsigned int edx0, __int64 a3));
 bool g_MoreReliableQuickshot_DuringAssassination_IsTryingToStartAQuickshotNow = false;
 void WhenTryingToMakeAQuickshotAndLeadingToAnAllowUnsheathingCheck_RememberTheContextOfQuickshotAttempt(AllRegisters* params)
 {
@@ -402,7 +402,7 @@ MoreReliableQuickshot::MoreReliableQuickshot()
 {
     //auto PreventAutomaticInstantReholsteringInMostSituations_v1 = [&]()
     //{
-    //    DEFINE_ADDR(whenQuickshotIsInterruptedByParkourUnparentGunFromHand, 0x141AB3480);
+    //    DEFINE_ADDR(whenQuickshotIsInterruptedByParkourUnparentGunFromHand, 0x141AB3660);
     //    whenQuickshotIsInterruptedByParkourUnparentGunFromHand = {
     //        0xC3        // ret
     //    };
@@ -411,7 +411,7 @@ MoreReliableQuickshot::MoreReliableQuickshot()
     {
         // Triggers every frame when you're in state that would normally prevent you from having a gun out:
         // during assassinations, jumps, while on wall, etc.
-        const uintptr_t whenInstantSheathingOrReholsteringDueToParkour = 0x141AB34F9;
+        const uintptr_t whenInstantSheathingOrReholsteringDueToParkour = 0x141ab2d29;
         PresetScript_CCodeInTheMiddle(whenInstantSheathingOrReholsteringDueToParkour, 5,
             WhenInstantSheathingOrReholsteringDueToParkour_DontDoThat, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
@@ -419,35 +419,35 @@ MoreReliableQuickshot::MoreReliableQuickshot()
     {
         // Triggers once when just starting an "assassination attempt":
         // choke, failed assassination from above do also count.
-        const uintptr_t whenInstantSheathingOrReholsteringDueToAssassination = 0x141AB3E74;
+        const uintptr_t whenInstantSheathingOrReholsteringDueToAssassination = 0x141AB3514;
         PresetScript_CCodeInTheMiddle(whenInstantSheathingOrReholsteringDueToAssassination, 5,
             WhenInstantSheathingOrReholsteringDueToAssassinationStart_DontDoThat, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
     auto FixImaginaryReloadIfQuickshotWhileSheathing = [&]()
     {
-        const uintptr_t whenFinalConfirmationThatQuickshotIsToBeAttempted = 0x14265E077;
+        const uintptr_t whenFinalConfirmationThatQuickshotIsToBeAttempted = 0x14265E1D7;
         PresetScript_NOP(whenFinalConfirmationThatQuickshotIsToBeAttempted, 2);
     };
 
     auto HookQuickshotStateLifetime = [&]()
     {
-        PresetScript_CCodeInTheMiddle(0x141AA4DD0, 9,
+        PresetScript_CCodeInTheMiddle(0x141AA4310, 9,
             Functor_Quickshot_Enter__hook, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-        PresetScript_CCodeInTheMiddle(0x141AA5430, 8,
+        PresetScript_CCodeInTheMiddle(0x141AA4970, 8,
             Functor_Quickshot_Exit__hook, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
 
 
     auto HookQuickshotMomentOfDischarge = [&]()
     {
-        const uintptr_t whenAboutToCreateAGunshot = 0x141A0D918;
+        const uintptr_t whenAboutToCreateAGunshot = 0x141A0D108;
         PresetScript_CCodeInTheMiddle(whenAboutToCreateAGunshot, 6,
             WhenAboutToCreateAGunshot_RememberTime, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
     auto HookAssassinationStateLifetime = [&]()
     {
-        const uintptr_t Functor_Parkour_Assassination_Entry__Enter = 0x141A462F0;
-        const uintptr_t Functor_Parkour_Assassination_Entry__Exit = 0x141A464A0;
+        const uintptr_t Functor_Parkour_Assassination_Entry__Enter = 0x141A456E0;
+        const uintptr_t Functor_Parkour_Assassination_Entry__Exit = 0x141A45890;
         PresetScript_CCodeInTheMiddle(Functor_Parkour_Assassination_Entry__Enter, 5,
             WhenAssassinationAttemptStarted, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
         PresetScript_CCodeInTheMiddle(Functor_Parkour_Assassination_Entry__Exit, 5,
@@ -456,18 +456,18 @@ MoreReliableQuickshot::MoreReliableQuickshot()
 
     auto FixForGettingStuckUnableToMoveOnLedgesOrChangeRangedWeapon_HookTimerThatEndsQuickshot = [&]()
     {
-        const uintptr_t whenTimerToEndQuickshotEnds = 0x142662327;
+        const uintptr_t whenTimerToEndQuickshotEnds = 0x142662487;
         PresetScript_CCodeInTheMiddle(whenTimerToEndQuickshotEnds, 7,
             WhenTimerToEndQuickshotEnds_Remember, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-        const uintptr_t whenCheckingIfTimerToEndQuickshotIsActive = 0x1426622D5;
+        const uintptr_t whenCheckingIfTimerToEndQuickshotIsActive = 0x142662435;
         PresetScript_CCodeInTheMiddle(whenCheckingIfTimerToEndQuickshotIsActive, 7,
             WhenCheckingIfTimerToEndQuickshotIsActive_ReactivateIfRecentlyFailed, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
 
     auto AllowScanForQuickshotTargetFromPeaksAndVShapes = [&]()
     {
-        DEFINE_ADDR(whenUpdatingRangedWeaponTarget_sitOnPeak, 0x141A03660);
-        DEFINE_ADDR(whenUpdatingRangedWeaponTarget_sitOnLedge, 0x141A14B30);
+        DEFINE_ADDR(whenUpdatingRangedWeaponTarget_sitOnPeak, 0x141A02D70);
+        DEFINE_ADDR(whenUpdatingRangedWeaponTarget_sitOnLedge, 0x141A143B0);
         whenUpdatingRangedWeaponTarget_sitOnPeak = {
             "48 8B 49 28"                                           // - mov rcx,[rcx+28]
             "48 8B 49 08"                                           // - mov rcx,[rcx+08]
@@ -476,18 +476,18 @@ MoreReliableQuickshot::MoreReliableQuickshot()
     };
     auto AllowScanForQuickshotTargetInMostSituations = [&]()
     {
-        uintptr_t whenUpdatingRangedWeaponTarget_onWallInJumpEtc_fnepilogue = 0x141AAD9EF;
+        uintptr_t whenUpdatingRangedWeaponTarget_onWallInJumpEtc_fnepilogue = 0x141aac70f;
         PresetScript_CCodeInTheMiddle(whenUpdatingRangedWeaponTarget_onWallInJumpEtc_fnepilogue, 5,
             WhenGettingRangedWeaponTarget_onWallInJumpEtc_ForceScan, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
     auto AnotherPreventionOfTheArmOutstretchedBug = [&]()
     {
-        uintptr_t someConditionThatLeadsToReholsterCheck = 0x1426687B7;
+        uintptr_t someConditionThatLeadsToReholsterCheck = 0x142668927;
         PresetScript_NOP(someConditionThatLeadsToReholsterCheck, 2);
     };
     //auto AlsoAllowInitiateQuickshotDuringAssassination = [&]()
     //{
-    //    DEFINE_ADDR(whenDoingSomeOtherCheckAboutWhetherQuickshotAnimationIsAllowed, 0x141B054B4);
+    //    DEFINE_ADDR(whenDoingSomeOtherCheckAboutWhetherQuickshotAnimationIsAllowed, 0x141B04854);
 
     //    // I've been hunting these two bytes for about a month.
     //    whenDoingSomeOtherCheckAboutWhetherQuickshotAnimationIsAllowed = {
@@ -496,8 +496,8 @@ MoreReliableQuickshot::MoreReliableQuickshot()
     //};
     auto AlsoAllowInitiateQuickshotDuringAssassination_v2 = [&]()
     {
-        uintptr_t whenPerformingSomeOtherCheckAboutWhetherQuickshotIsAllowedToStart = 0x141B054AD;
-        uintptr_t whenTryingToMakeAQuickshotAndLeadingToAnAllowUnsheathingCheck = 0x14265E03B;
+        uintptr_t whenPerformingSomeOtherCheckAboutWhetherQuickshotIsAllowedToStart = 0x141B0484D;
+        uintptr_t whenTryingToMakeAQuickshotAndLeadingToAnAllowUnsheathingCheck = 0x14265E19B;
         PresetScript_CCodeInTheMiddle(whenPerformingSomeOtherCheckAboutWhetherQuickshotIsAllowedToStart, 5,
             WhenPerformingSomeOtherCheckAboutWhetherQuickshotIsAllowedToStart_AllowInitiateQuickshotDuringAssassination, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
         PresetScript_CCodeInTheMiddle(whenTryingToMakeAQuickshotAndLeadingToAnAllowUnsheathingCheck, 5,
@@ -530,22 +530,22 @@ MoreReliableQuickshot::MoreReliableQuickshot()
 
     auto AWayToMonitorTheCollisionResultsOfTheGunshots = [&]()
     {
-        uintptr_t whenGunshotRaycastSuccessful = 0x14057659E;
+        uintptr_t whenGunshotRaycastSuccessful = 0x14057442E;
         PresetScript_CCodeInTheMiddle(whenGunshotRaycastSuccessful, 5,
             WhenGunshotRaycastSuccessful_Display, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-        uintptr_t whenGatheredGunshotLineOfFireResults = 0x140579252;
+        uintptr_t whenGatheredGunshotLineOfFireResults = 0x1405770E2;
         PresetScript_CCodeInTheMiddle(whenGatheredGunshotLineOfFireResults, 5,
             WhenGatheredGunshotLineOfFireResults_RememberResults, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
     auto DontAccidentallyHitTheChokedNPCWhenPerformingQuickshotDuringChoke = [&]()
     {
-        uintptr_t whenTheFirstRaycastResultWasSelected = 0x140579268;
+        uintptr_t whenTheFirstRaycastResultWasSelected = 0x1405770F8;
         PresetScript_CCodeInTheMiddle(whenTheFirstRaycastResultWasSelected, 6,
             WhenTheFirstGunshotRaycastResultWasSelected_DontCollideWithTheChokedNPC, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
     auto ExcludeChokedNPCFromQuickshotTargets = [&]()
     {
-        uintptr_t whenFilteringTheResultsOfCoarseQuickshotScan = 0x141B24323;
+        uintptr_t whenFilteringTheResultsOfCoarseQuickshotScan = 0x141B23BA3;
         PresetScript_CCodeInTheMiddle(whenFilteringTheResultsOfCoarseQuickshotScan, 5,
             WhenFilteringTheResultsOfCoarseQuickshotScan_ExcludeChokedNPC, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
@@ -569,7 +569,7 @@ static bool IsShouldForceAllowScanForQuickshotTargets()
     }
     return true;
 }
-DEFINE_GAME_FUNCTION(sitOnLedge_writeRangedTargetEntity, 0x141A14B30, void, __fastcall, (__int64 a1, __int64 a2))
+DEFINE_GAME_FUNCTION(sitOnLedge_writeRangedTargetEntity, 0x141A143B0, void, __fastcall, (__int64 a1, __int64 a2))
 void WhenGettingRangedWeaponTarget_onWallInJumpEtc_ForceScan_inner(__int64 a1, __int64 a2)
 {
     struct Fake_Functor_Parkour_Nav_Entry__ParentStack
@@ -662,7 +662,7 @@ void WhenGatheredGunshotLineOfFireResults_RememberResults(AllRegisters* params)
             });
     }
 }
-DEFINE_GAME_FUNCTION(ArrRaycastResults__GetNext, 0x1425D5550, RaycastResult*, __fastcall, (SmallArray<RaycastResult>* a1, RaycastResult* p_startFrom_opt, char p_0getFirst));
+DEFINE_GAME_FUNCTION(ArrRaycastResults__GetNext, 0x1425D59C0, RaycastResult*, __fastcall, (SmallArray<RaycastResult>* a1, RaycastResult* p_startFrom_opt, char p_0getFirst));
 void WhenTheFirstGunshotRaycastResultWasSelected_DontCollideWithTheChokedNPC(AllRegisters* params)
 {
     RaycastResult* firstSelectedRaycastResult = (RaycastResult*)params->GetRAX();
@@ -714,7 +714,7 @@ void WhenTheFirstGunshotRaycastResultWasSelected_DontCollideWithTheChokedNPC(All
     } while (true);
     params->GetRAX() = (uint64)selectedResult;
 }
-DEFINE_GAME_FUNCTION(IsEntityKilledOrBeingKilled_mb, 0x1409E7490, char, __fastcall, (SharedPtrAndSmth* a1));
+DEFINE_GAME_FUNCTION(IsEntityKilledOrBeingKilled_mb, 0x1409E6E60, char, __fastcall, (SharedPtrAndSmth* a1));
 void WhenFilteringTheResultsOfCoarseQuickshotScan_ExcludeChokedNPC(AllRegisters* params)
 {
     SharedPtrAndSmth* testedNPC_shared = (SharedPtrAndSmth*)params->rcx_;

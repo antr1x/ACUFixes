@@ -13,13 +13,13 @@
 
 class Entity;
 
-DEFINE_GAME_FUNCTION(AvailableParkourAction__FinalFilter1, 0x1401D4DE0, bool, __fastcall, (AvailableParkourAction* p_parkourAction, __m128* a2, uint64 a3, Entity* p_playerEntity));
-DEFINE_GAME_FUNCTION(AvailableParkourAction__FinalFilter2, 0x1401D3000, bool, __fastcall, (AvailableParkourAction* p_parkourAction, Entity* p_playerEntity, __int64 a3));
-DEFINE_GAME_FUNCTION(ConstructParkourAction_A, 0x1401CC990, AvailableParkourAction*, __fastcall, (EnumParkourAction p_actionEnum, __m128* a2, __m128* a3, __m128* p_movementVecWorld_mb, int a5, char a6, __int64 a7, AvailableParkourAction* p_previousAction_mb));
-DEFINE_GAME_FUNCTION(ConstructParkourAction_B, 0x1401D1FC0, AvailableParkourAction*, __fastcall, (EnumParkourAction p_actionEnum, __m128* a2, __m128* a3, __m128* p_movementVecWorld_mb, int a5, char a6, __int64 a7, __int64 a8, Entity* p_player, AvailableParkourAction* p_previousAction_mb));
-DEFINE_GAME_FUNCTION(AvailableParkourAction__InitializePlayerRef, 0x14015A570, void, __fastcall, (PlayerRefInParkourAction* p_playerRefOut, Entity* a2));
+DEFINE_GAME_FUNCTION(AvailableParkourAction__FinalFilter1, 0x1401D4360, bool, __fastcall, (AvailableParkourAction* p_parkourAction, __m128* a2, uint64 a3, Entity* p_playerEntity));
+DEFINE_GAME_FUNCTION(AvailableParkourAction__FinalFilter2, 0x1401D2580, bool, __fastcall, (AvailableParkourAction* p_parkourAction, Entity* p_playerEntity, __int64 a3));
+DEFINE_GAME_FUNCTION(ConstructParkourAction_A, 0x1401CBF00, AvailableParkourAction*, __fastcall, (EnumParkourAction p_actionEnum, __m128* a2, __m128* a3, __m128* p_movementVecWorld_mb, int a5, char a6, __int64 a7, AvailableParkourAction* p_previousAction_mb));
+DEFINE_GAME_FUNCTION(ConstructParkourAction_B, 0x1401D1530, AvailableParkourAction*, __fastcall, (EnumParkourAction p_actionEnum, __m128* a2, __m128* a3, __m128* p_movementVecWorld_mb, int a5, char a6, __int64 a7, __int64 a8, Entity* p_player, AvailableParkourAction* p_previousAction_mb));
+DEFINE_GAME_FUNCTION(AvailableParkourAction__InitializePlayerRef, 0x140159940, void, __fastcall, (PlayerRefInParkourAction* p_playerRefOut, Entity* a2));
 // Used for a SmallArray of plain types, where constructors/destructors don't matter.
-DEFINE_GAME_FUNCTION(SmallArray_POD__RemoveGeneric, 0x142725F00, void, __fastcall, (void* smallArray, int p_idx, unsigned int p_elemSize));
+DEFINE_GAME_FUNCTION(SmallArray_POD__RemoveGeneric, 0x142726000, void, __fastcall, (void* smallArray, int p_idx, unsigned int p_elemSize));
 
 
 #include "MyLog.h"
@@ -277,13 +277,13 @@ int SortAndSelectBestMatchingAction_FullReplacement(
 GPH_Creation::GPH_Creation()
 {
     // Most "action types" are created from this call.
-    PresetScript_ReplaceFunctionAtItsStart(0x1401D1CF0, CreateParkourActionAndPerformInitialTestIfFits_A_FullReplacement);
+    PresetScript_ReplaceFunctionAtItsStart(0x1401D1260, CreateParkourActionAndPerformInitialTestIfFits_A_FullReplacement);
     // Several "Wallrun up" actions get created from this call.
-    PresetScript_ReplaceFunctionAtItsStart(0x1401D1E50, CreateParkourActionAndPerformInitialTestIfFits_B_FullReplacement);
+    PresetScript_ReplaceFunctionAtItsStart(0x1401D13C0, CreateParkourActionAndPerformInitialTestIfFits_B_FullReplacement);
 }
 GPH_SortAndSelect::GPH_SortAndSelect()
 {
-    PresetScript_ReplaceFunctionAtItsStart(0x140133B00, SortAndSelectBestMatchingAction_FullReplacement);
+    PresetScript_ReplaceFunctionAtItsStart(0x140134940, SortAndSelectBestMatchingAction_FullReplacement);
 }
 SharedHookActivator::SharedHookActivator(std::function<void()> onCreate, std::function<void()> onDestroy)
     : m_OnCreate(onCreate)

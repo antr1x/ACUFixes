@@ -50,6 +50,6 @@ public:
 	char pad_0391[151]; //0x0391
 
 	// @helper_functions
-	static LoadingThread* GetSingleton() { return *(LoadingThread**)0x14525B8F8; }
+	static LoadingThread* GetSingleton() { return *(LoadingThread**)0x14525D848; }
 }; //Size: 0x0428
 assert_sizeof(LoadingThread, 0x428);

@@ -245,6 +245,7 @@ if exist "$(ProjectDir)copy_output_to_directory.txt" (
     <ClCompile Include="src\VariousPatches\Hack_AimFromPeaks.cpp" />
     <ClCompile Include="src\VariousPatches\Hack_BreakfallAndLedgeGrab.cpp" />
     <ClCompile Include="src\VariousPatches\Hack_CycleEquipmentWhenScrollingMousewheel.cpp" />
+    <ClCompile Include="src\VariousPatches\Hack_KeepCursorInsideGameWindow.cpp" />
     <ClCompile Include="src\Hacks_ImGuiControl.cpp" />
     <ClCompile Include="src\VariousPatches\Hack_DontForceUnsheatheWhenInDisguise.cpp" />
     <ClCompile Include="src\VariousPatches\Hack_EnterWindowsWhenRisPressed.cpp" />

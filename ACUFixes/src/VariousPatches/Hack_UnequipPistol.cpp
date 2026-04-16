@@ -11,7 +11,7 @@
 
 PanelPageHelper* DynamicCast_PanelPageHelper(void* obj)
 {
-    constexpr uint64 vtbl_PanelPageHelper = 0x142EEC010;
+    constexpr uint64 vtbl_PanelPageHelper = 0x142EED1E0;
     if (*(uint64*)obj == vtbl_PanelPageHelper)
     {
         return (PanelPageHelper*)obj;
@@ -20,7 +20,7 @@ PanelPageHelper* DynamicCast_PanelPageHelper(void* obj)
 }
 GearPage* DynamicCast_GearPage(void* obj)
 {
-    constexpr uint64 vtbl_GearPage = 0x142EDF810;
+    constexpr uint64 vtbl_GearPage = 0x142EE0A40;
     if (*(uint64*)obj == vtbl_GearPage)
     {
         return (GearPage*)obj;
@@ -29,7 +29,7 @@ GearPage* DynamicCast_GearPage(void* obj)
 }
 
 #include "ACU/GearUIInfo.h"
-DEFINE_GAME_FUNCTION(CastTo_GearUIInfo, 0x14086E030, GearUIInfo*, __fastcall, (ManagedObject* obj));
+DEFINE_GAME_FUNCTION(CastTo_GearUIInfo, 0x14086DB30, GearUIInfo*, __fastcall, (ManagedObject* obj));
 static bool IsGearUIInfoCorrespondingToAPistol(GearUIInfo& gearInfo)
 {
     return
@@ -101,7 +101,7 @@ void WhenPressedAnEnabledEquipGearButton_AllowProcessingIfPistol(AllRegisters* p
     }
     params->GetRAX() = 1;
 }
-DEFINE_GAME_FUNCTION(GearUIInfo__IsGearEquipped, 0x140889020, char, __fastcall, (GearUIInfo* gearInfo));
+DEFINE_GAME_FUNCTION(GearUIInfo__IsGearEquipped, 0x140886CE0, char, __fastcall, (GearUIInfo* gearInfo));
 void WhenTryingToEquipGear_CheckIfTryingToREEQUIPpistol(AllRegisters* params)
 {
     GearUIInfo* gearInfo = (GearUIInfo*)params->rbx_;
@@ -116,8 +116,8 @@ void WhenTryingToEquipGear_CheckIfTryingToREEQUIPpistol(AllRegisters* params)
         params->GetRAX() = 0;
     }
 }
-DEFINE_GAME_FUNCTION(AvatarGearManager__UnequipOutfit_mb, 0x140D40610, void, __fastcall, (AvatarGearManager* a1, AvatarGear* p_gear));
-DEFINE_GAME_FUNCTION(AvatarGearManager__EquipGear_mb, 0x140D2B240, void, __fastcall, (AvatarGearManager* a1, AvatarGear* p_gear));
+DEFINE_GAME_FUNCTION(AvatarGearManager__UnequipOutfit_mb, 0x140D40070, void, __fastcall, (AvatarGearManager* a1, AvatarGear* p_gear));
+DEFINE_GAME_FUNCTION(AvatarGearManager__EquipGear_mb, 0x140D2B030, void, __fastcall, (AvatarGearManager* a1, AvatarGear* p_gear));
 void WhenAboutToSuccessfullyEquipGear_UnequipPistolInsteadOfEquipping(AllRegisters* params)
 {
     GearUIInfo* gearInfo = (GearUIInfo*)params->rbx_;
@@ -141,21 +141,21 @@ void WhenAboutToSuccessfullyEquipGear_UnequipPistolInsteadOfEquipping(AllRegiste
 
 PreventAutomaticReequipPistol::PreventAutomaticReequipPistol()
 {
-    uintptr_t whenBestPistolAboutToBeSelectedAfterSwitchingFromTwohandedRangedWeaponToNonrangedMelee = 0x140D2B613;
+    uintptr_t whenBestPistolAboutToBeSelectedAfterSwitchingFromTwohandedRangedWeaponToNonrangedMelee = 0x140D2B403;
     PresetScript_NOP(whenBestPistolAboutToBeSelectedAfterSwitchingFromTwohandedRangedWeaponToNonrangedMelee, 5);
 }
 UnequipPistol::UnequipPistol()
 {
-    uintptr_t whenJustTriedToPressUIButton = 0x1407A3D0F;
+    uintptr_t whenJustTriedToPressUIButton = 0x1407A392F;
     PresetScript_CCodeInTheMiddle(whenJustTriedToPressUIButton, 7,
         WhenJustTriedToPressUIButton_EnabledButtonIfAttemptToEquip, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenPressedAnEnabledEquipGearButton = 0x140854C9D;
+    uintptr_t whenPressedAnEnabledEquipGearButton = 0x14085493D;
     PresetScript_CCodeInTheMiddle(whenPressedAnEnabledEquipGearButton, 6,
         WhenPressedAnEnabledEquipGearButton_AllowProcessingIfPistol, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
-    uintptr_t whenTryingToEquipGearCheckingIfAlreadyEquipped = 0x140854CC9;
+    uintptr_t whenTryingToEquipGearCheckingIfAlreadyEquipped = 0x140854969;
     PresetScript_CCodeInTheMiddle(whenTryingToEquipGearCheckingIfAlreadyEquipped, 5,
         WhenTryingToEquipGear_CheckIfTryingToREEQUIPpistol, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
-    uintptr_t whenAboutToSuccessfullyEquipGear = 0x140854D26;
+    uintptr_t whenAboutToSuccessfullyEquipGear = 0x1408549C6;
     PresetScript_CCodeInTheMiddle(whenAboutToSuccessfullyEquipGear, 5,
         WhenAboutToSuccessfullyEquipGear_UnequipPistolInsteadOfEquipping, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 }

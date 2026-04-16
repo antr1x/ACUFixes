@@ -1433,7 +1433,7 @@ void DrawGraphVariable<float>(const char* label, GraphEvaluation& graphEvaluatio
             SetGraphVariable<float>(graphEvaluation, varnameHash, *v);
     }
 }
-DEFINE_GAME_FUNCTION(FreeHashmap_mb, 0x14277A8A0, signed __int64, __fastcall, (uint64 hashmap, uint64 p_errorOut_mb));
+DEFINE_GAME_FUNCTION(FreeHashmap_mb, 0x14277AEB0, signed __int64, __fastcall, (uint64 hashmap, uint64 p_errorOut_mb));
 void ClearBoneLayeringCache(AtomGraph& atomGraph)
 {
     FreeHashmap_mb((uint64)&atomGraph.p98->hashmapOfSkeletonCombinations_mb, 0);
@@ -1471,7 +1471,7 @@ struct g_PickedAtomGraph
 } g_PickedAtomGraph;
 ACU::StrongRef<AtomGraph> GetAtomGraph(Entity& ent)
 {
-    constexpr uint64 vtbl_AtomAnimComponent = 0x142E7F780;
+    constexpr uint64 vtbl_AtomAnimComponent = 0x142E80600;
     AtomAnimComponent* atomAnimCpnt = static_cast<AtomAnimComponent*>(ent.FindComponentByVTBL(vtbl_AtomAnimComponent));
     if (!atomAnimCpnt) return {};
     return (ACU::StrongRef<AtomGraph>&)atomAnimCpnt->shared_AtomGraph_NewDemo_DEV;

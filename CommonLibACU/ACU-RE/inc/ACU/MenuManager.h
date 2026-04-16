@@ -45,6 +45,6 @@ public:
 	char pad_0038[72]; //0x0038
 
 	// @helper_functions
-	static MenuManager* GetSingleton() { return *(MenuManager**)0x1451EACE8; }
+	static MenuManager* GetSingleton() { return *(MenuManager**)0x1451ECC68; }
 }; //Size: 0x0080
 assert_sizeof(MenuManager, 0x80);

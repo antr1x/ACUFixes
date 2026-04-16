@@ -12,7 +12,7 @@ public:
 
     // @helper_functions
     static HasRenderTargetSizeAccountingForLetterbox* GetSingleton() {
-        return *(HasRenderTargetSizeAccountingForLetterbox**)0x14524CFD8;
+        return *(HasRenderTargetSizeAccountingForLetterbox**)0x14524EF50;
     }
 }; //Size: 0x0030
 assert_offsetof(HasRenderTargetSizeAccountingForLetterbox, displaySizeWithoutLetterbox, 0x28);

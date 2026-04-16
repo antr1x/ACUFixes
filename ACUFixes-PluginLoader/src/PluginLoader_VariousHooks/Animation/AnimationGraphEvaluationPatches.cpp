@@ -5,7 +5,7 @@
 #include "ACU/Memory/ACUAllocs.h"
 
 #include "ACU_DefineNativeFunction.h"
-DEFINE_GAME_FUNCTION(HashmapGeneric__AddElement, 0x14277B2A0, void*, __fastcall, (ACUHashmapGeneric* p_hashmap, unsigned __int64 p_key, __int64 p_errorOut_mb));
+DEFINE_GAME_FUNCTION(HashmapGeneric__AddElement, 0x14277B8B0, void*, __fastcall, (ACUHashmapGeneric* p_hashmap, unsigned __int64 p_key, __int64 p_errorOut_mb));
 // Returns ptr to element, or `-1` if fails for some reason, I guess?
 void* ACUHashmapGeneric_AddElement(ACUHashmapGeneric* hashmap, uint64 key)
 {
@@ -18,7 +18,7 @@ void ACUHashmap_Set(ACUHashmap<Key_t, Value_t>& hashmap, Key_t key, Value_t valu
 }
 void* AddMyNewRTCPVariable_generic(AtomGraph& atomGraph, uint8 varAlignment, uint8 varSize, uint32 varnameHash)
 {
-    // Kind of taken from `AtomGraph_90::Init()` at 0x140123630.
+    // Kind of taken from `AtomGraph_90::Init()` at 0x140122b10.
     AtomGraph_RTCP* rtcpCached = atomGraph.rtcp;
 
     const uint16 oldRTCPDataSize = rtcpCached->graphVarsBuffer.size;
@@ -189,20 +189,20 @@ AnimationGraphEvaluationPatches::AnimationGraphEvaluationPatches()
     // So whenever I insert a new "normal" RTCP variable, I need to increase the indices of the `entityref` variables
     // by 1, but patch the "animation system" in such a way that it can correctly look up
     // the `entityref` variables by their old indices.
-    uintptr_t whenResolvingEntityrefGraphVarIndex_2 = 0x1400B5060;
+    uintptr_t whenResolvingEntityrefGraphVarIndex_2 = 0x1400B4B90;
     PresetScript_CCodeInTheMiddle(whenResolvingEntityrefGraphVarIndex_2, 5,
         WhenResolvingEntityrefGraphVarIndex_2_adjustIndex, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenResolvingEntityrefGraphVarIndex_3 = 0x1400A29A0;
+    uintptr_t whenResolvingEntityrefGraphVarIndex_3 = 0x1400A25D0;
     PresetScript_CCodeInTheMiddle(whenResolvingEntityrefGraphVarIndex_3, 5,
         WhenResolvingEntityrefGraphVarIndex_3_adjustIndex, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
 
 
 
-    uintptr_t whenEnabledSignalReceiverHasReceivedAChange = 0x141942CB0;
+    uintptr_t whenEnabledSignalReceiverHasReceivedAChange = 0x141942620;
     PresetScript_CCodeInTheMiddle(whenEnabledSignalReceiverHasReceivedAChange, 5,
         WhenEnabledSignalReceiverHasReceivedAChange_DispatchToCustomSubscribers, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenFinishedBuildingDefaultSignalReceivers = 0x1401C0ADA;
+    uintptr_t whenFinishedBuildingDefaultSignalReceivers = 0x1401C005A;
     PresetScript_CCodeInTheMiddle(whenFinishedBuildingDefaultSignalReceivers, 8,
         WhenInitializingArrayOfIntegerSignalReceivers_FinishedBuildingDefaultSignalReceivers_AddCustomSignals, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 

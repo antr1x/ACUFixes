@@ -105,10 +105,10 @@ void WhenUpdatingCameraVirtualRotation_FlipWhenMiddleButtonIsPressed(AllRegister
 }
 LookbehindButton::LookbehindButton()
 {
-    uintptr_t whenReadingCameraDirectionForMovement = 0x141F027A5;
+    uintptr_t whenReadingCameraDirectionForMovement = 0x141F02275;
     PresetScript_CCodeInTheMiddle(whenReadingCameraDirectionForMovement, 5,
         WhenReadingCameraRotationForMovement_PretendYoureMovingInOppositeDirection, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenUpdatingCameraVirtualRotation = 0x141F3F88A;
+    uintptr_t whenUpdatingCameraVirtualRotation = 0x141F3FD2A;
     PresetScript_CCodeInTheMiddle(whenUpdatingCameraVirtualRotation, 8,
         WhenUpdatingCameraVirtualRotation_FlipWhenMiddleButtonIsPressed, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

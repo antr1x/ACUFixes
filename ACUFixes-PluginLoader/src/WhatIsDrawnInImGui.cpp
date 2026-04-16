@@ -4,6 +4,7 @@
 #include "ImGuiCTX.h"
 
 #include "PluginLoaderConfig.h"
+#include "PluginLoader.h"
 #include "ImGuiConfigUtils.h"
 
 #include "Common_Plugins/ACUPlugin.h"

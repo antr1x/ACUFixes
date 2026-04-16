@@ -163,6 +163,6 @@ public:
     char pad_1988[72]; //0x1988
 
     // @helper_functions
-    static GamePlaySettings* GetSingleton() { return *(GamePlaySettings**)0x1451B4C58; }
+    static GamePlaySettings* GetSingleton() { return *(GamePlaySettings**)0x1451B6BD8; }
 }; //Size: 0x19D0
 assert_sizeof(GamePlaySettings, 0x19D0);

@@ -430,7 +430,7 @@ public:
 
     // @helper_functions
     Component* FindComponentByVTBL(uint64 vtbl);
-    static TypeInfo& GetTI() { return *(TypeInfo*)0x144E6ABB0; }
+    static TypeInfo& GetTI() { return *(TypeInfo*)0x144E6CA90; }
 }; //Size: 0x0170
 assert_offsetof(Entity, selfSharedPtr, 0x130);
 assert_offsetof(Entity, cpntIndices_157.atomAnimCpnt, 0x158);

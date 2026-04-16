@@ -25,6 +25,7 @@ public:
 	uint16 UsingRTCPDuration : 1;
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DDDB0; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DFDC0; }
 }; //Size: 0x0028
 assert_sizeof(AtomStateTransitionTarget, 0x28);

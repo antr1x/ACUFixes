@@ -32,8 +32,8 @@
 
 
 
-DEFINE_GAME_FUNCTION(oneOfThoseFns_WhenStartActing, 0x141AC3CA0, __int64, __fastcall, (HumanStatesHolder* p_humanStates, char* a2, Animation* p_anim, uint32 a4, char a5, char a6));
-DEFINE_GAME_FUNCTION(oneOfThoseFns_UpdateCinematicAnimationTime, 0x141B1AD30, __int64, __fastcall, (HumanStatesHolder* p_humanStates, float p_time, uint32 p_bodyPartChannelIdx));
+DEFINE_GAME_FUNCTION(oneOfThoseFns_WhenStartActing, 0x141AC3040, __int64, __fastcall, (HumanStatesHolder* p_humanStates, char* a2, Animation* p_anim, uint32 a4, char a5, char a6));
+DEFINE_GAME_FUNCTION(oneOfThoseFns_UpdateCinematicAnimationTime, 0x141B1A610, __int64, __fastcall, (HumanStatesHolder* p_humanStates, float p_time, uint32 p_bodyPartChannelIdx));
 
 
 
@@ -259,7 +259,7 @@ void MyAnimationPlayer::DrawControls()
         {
             if (auto* humanStates = HumanStatesHolder::GetForPlayer())
             {
-                DEFINE_GAME_FUNCTION(oneOfThoseFns_WhenFinishedCinematic2_mb, 0x141B1A630, __int64, __fastcall, (HumanStatesHolder * a1, SeamlessCinematicOutroTransitionOperatorData * a2));
+                DEFINE_GAME_FUNCTION(oneOfThoseFns_WhenFinishedCinematic2_mb, 0x141B19E10, __int64, __fastcall, (HumanStatesHolder * a1, SeamlessCinematicOutroTransitionOperatorData * a2));
                 oneOfThoseFns_WhenFinishedCinematic2_mb(humanStates, &humanStates->cinematicOutroData_mb);
             }
             m_playedAnim.reset();
@@ -305,8 +305,8 @@ void MyAnimationPlayer::UpdateAnimations()
     SetGraphVariable<float>(*graphEval, hash_CinematicAnimationTime, currentAnimTime);
 }
 
-DEFINE_GAME_FUNCTION(Animation__ctor, 0x140053270, Animation*, __fastcall, (Animation* a1));
-DEFINE_GAME_FUNCTION(AnimTrackData__ctor, 0x1400530D0, AnimTrackData*, __fastcall, (AnimTrackData* a1));
+DEFINE_GAME_FUNCTION(Animation__ctor, 0x140053190, Animation*, __fastcall, (Animation* a1));
+DEFINE_GAME_FUNCTION(AnimTrackData__ctor, 0x140052FF0, AnimTrackData*, __fastcall, (AnimTrackData* a1));
 
 class MySpoofAnimation
 {
@@ -323,10 +323,10 @@ private:
 class SmthDuringDeserializeManagedObj
 {
 public:
-    static SmthDuringDeserializeManagedObj& GetSingleton() { return *(SmthDuringDeserializeManagedObj*)0x1450A9628; }
+    static SmthDuringDeserializeManagedObj& GetSingleton() { return *(SmthDuringDeserializeManagedObj*)0x1450AB5B8; }
 };
 
-DEFINE_GAME_FUNCTION(FindManagedObjectByHandle, 0x1426F5950, ManagedObject*, __fastcall, (SmthDuringDeserializeManagedObj* a1, unsigned __int64 p_handle));
+DEFINE_GAME_FUNCTION(FindManagedObjectByHandle, 0x1426F5A70, ManagedObject*, __fastcall, (SmthDuringDeserializeManagedObj* a1, unsigned __int64 p_handle));
 Animation* CreateManagedAnimationByHandle(uint64 handle)
 {
     using TargetType = Animation;
@@ -375,7 +375,7 @@ constexpr float magic_add = std::_Bit_cast<float, uint32>(0xBF3504F3); // roughl
 using AnimQuaternionPacked = uint64;
 Vector4f ACUQuaternionUnpack(AnimQuaternionPacked quatPacked)
 {
-    // Implementation from 0x140087490: `AnimationTrackSolver_0xF_UnpackTwoNeighboringQuatKeyframes()`
+    // Implementation from 0x140087310: `AnimationTrackSolver_0xF_UnpackTwoNeighboringQuatKeyframes()`
     Vector4f result;
 
     __m128 quatPacked2{ 0 };

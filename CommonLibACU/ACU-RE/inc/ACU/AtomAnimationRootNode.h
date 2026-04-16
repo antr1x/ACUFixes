@@ -24,6 +24,7 @@ public:
 	char pad_0073[5]; //0x0073
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D7870; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D9880; }
 }; //Size: 0x0078
 assert_sizeof(AtomAnimationRootNode, 0x78);

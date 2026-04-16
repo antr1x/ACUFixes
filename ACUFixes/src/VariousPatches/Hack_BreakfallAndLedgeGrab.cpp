@@ -28,10 +28,10 @@ void WhenInFreefall_HelpFindLedgeToGrab(AllRegisters* params)
 }
 BreakfallAndLedgeGrab::BreakfallAndLedgeGrab()
 {
-    uintptr_t whenInFreefallTestForBreakfall = 0x141A3C0E1;
+    uintptr_t whenInFreefallTestForBreakfall = 0x141A3B4D1;
     PresetScript_CCodeInTheMiddle(whenInFreefallTestForBreakfall, 5,
         WhenInFreefall_HelpFindLedgeToGrab, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenInFreefallTestForBreakfall_functionEpilogue = 0x141A3C293;
+    uintptr_t whenInFreefallTestForBreakfall_functionEpilogue = 0x141A3B683;
     PresetScript_CCodeInTheMiddle(whenInFreefallTestForBreakfall_functionEpilogue, 5,
         WhenInFreefall_RestoreModifiedVectors, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

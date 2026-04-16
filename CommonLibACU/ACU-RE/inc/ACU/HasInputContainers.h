@@ -22,7 +22,7 @@ public:
     char pad_0018[80]; //0x0018
 
     // @helper_functions
-    static HasInputContainers* GetSingleton() { return *(HasInputContainers**)0x14525BEC8; }
+    static HasInputContainers* GetSingleton() { return *(HasInputContainers**)0x14525DE08; }
 }; //Size: 0x0068
 assert_offsetof(HasInputContainers, p_10, 0x10);
 assert_sizeof(HasInputContainers, 0x68);

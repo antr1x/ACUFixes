@@ -4,7 +4,7 @@
 #include "ACU/MenuManager.h"
 
 
-constexpr uint64 vtbl_HomePage = 0x142EE9570;
+constexpr uint64 vtbl_HomePage = 0x142EEA740;
 HomePage* HomePage::GetSingleton()
 {
     auto* menuMan = MenuManager::GetSingleton(); if (!menuMan) return nullptr;

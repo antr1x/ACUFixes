@@ -49,11 +49,11 @@ assert_offsetof(RaycastStruct, raycastResults, 8);
 assert_offsetof(RaycastStruct, word_660, 0x660);
 assert_offsetof(RaycastStruct, excludedEntities_mb, 0x620);
 assert_sizeof(RaycastStruct, 0x680);
-DEFINE_GAME_FUNCTION(RaycastStruct__ctor, 0x1425EC5A0, RaycastStruct*, __fastcall, (RaycastStruct* this_));
+DEFINE_GAME_FUNCTION(RaycastStruct__ctor, 0x1425EC7C0, RaycastStruct*, __fastcall, (RaycastStruct* this_));
 class World;
-DEFINE_GAME_FUNCTION(g_RaycastStruct__CastRay_impl, 0x1425FD7D0, char, __fastcall, (RaycastStruct* this_, World* world, __m128* p_origin, __m128* p_direction, float p_rayLength, unsigned __int8 p_1forGunshot, char p_0forGunshot))
-DEFINE_GAME_FUNCTION(ArrRaycastResults__SortByDistance, 0x1425DF220, void, __fastcall, (SmallArray<RaycastResult>* arr));
-DEFINE_GAME_FUNCTION(ArrRaycastResults__Destroy, 0x140010340, void, __fastcall, (SmallArray<RaycastResult>* arr));
+DEFINE_GAME_FUNCTION(g_RaycastStruct__CastRay_impl, 0x1425FD8C0, char, __fastcall, (RaycastStruct* this_, World* world, __m128* p_origin, __m128* p_direction, float p_rayLength, unsigned __int8 p_1forGunshot, char p_0forGunshot))
+DEFINE_GAME_FUNCTION(ArrRaycastResults__SortByDistance, 0x1425DF830, void, __fastcall, (SmallArray<RaycastResult>* arr));
+DEFINE_GAME_FUNCTION(ArrRaycastResults__Destroy, 0x140010540, void, __fastcall, (SmallArray<RaycastResult>* arr));
 void CalculateViewportForCurrentFrame(Vector2f& topLeftOut, Vector2f& bottomRightOut);
 namespace Raycasting
 {

@@ -38,6 +38,6 @@ public:
     char pad_0700[1080]; //0x0700
 
     // @helper_functions
-    static HasSwapchain* GetSingleton() { return *(HasSwapchain**)0x14523C6D8; }
+    static HasSwapchain* GetSingleton() { return *(HasSwapchain**)0x14523E648; }
 }; //Size: 0x0B38
 assert_offsetof(HasSwapchain, toSwapchain, 0x6f8);

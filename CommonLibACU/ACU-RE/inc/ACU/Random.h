@@ -10,7 +10,7 @@ public:
     uint32 m_seed;
 
     // @helper_functions
-    static RandomNumberGenerator* GetSingleton() { return *(RandomNumberGenerator**)0x14525FAE0; }
+    static RandomNumberGenerator* GetSingleton() { return *(RandomNumberGenerator**)0x14525F840; }
     uint32 GetNext()
     {
         uint32 newRand = m_seed * 0x19660D + 0x3C6EF35F;

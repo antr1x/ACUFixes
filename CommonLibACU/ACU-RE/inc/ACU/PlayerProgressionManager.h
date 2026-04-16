@@ -207,7 +207,7 @@ public:
 	char pad_0010[8]; //0x0010
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x143E39010; }
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x143E3AF90; }
 }; //Size: 0x0018
 assert_sizeof(InventoryItemSettingsSaveData, 0x18);
 
@@ -253,7 +253,7 @@ public:
 	char pad_0528[72]; //0x0528
 
 	// @helper_functions
-	static PlayerProgressionManager* GetSingleton() { return *(PlayerProgressionManager**)0x1451B3C58; }
+	static PlayerProgressionManager* GetSingleton() { return *(PlayerProgressionManager**)0x1451B5BD8; }
 }; //Size: 0x0570
 assert_offsetof(PlayerProgressionManager, assassinAbilitySets, 0x4E8);
 assert_sizeof(PlayerProgressionManager, 0x570);

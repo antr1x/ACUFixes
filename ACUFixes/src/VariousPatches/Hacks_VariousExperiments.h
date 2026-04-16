@@ -26,7 +26,7 @@ struct PlayWithFOV : AutoAssemblerCodeHolder_Base
     PlayWithFOV()
     {
         PresetScript_CCodeInTheMiddle(
-            0x141F3FE3B, 6
+            0x141F402DB, 6
             , FOVGames
             , RETURN_TO_RIGHT_AFTER_STOLEN_BYTES
             , true);
@@ -38,7 +38,7 @@ struct PlayWithFOV : AutoAssemblerCodeHolder_Base
 #include "ACU/ThrowTargetPrecision.h"
 void OverrideThrowPredictorBeamPosition(AllRegisters* params)
 {
-    // At this injection point (0x14055B4BB) RBX == ThrowTargetPrecision* and takes two values:
+    // At this injection point (0x14055937b) RBX == ThrowTargetPrecision* and takes two values:
     // two systems that receive messages about the predictor beam's results.
     // One regulates camera rotation around Z, the other one - rotation around camera's left-right axis.
     Entity* player = ACU::GetPlayer();
@@ -61,14 +61,14 @@ struct PlayWithBombAimCameraTracker2 : AutoAssemblerCodeHolder_Base
     PlayWithBombAimCameraTracker2()
     {
         PresetScript_CCodeInTheMiddle(
-            0x14055B4BB, 8
+            0x14055937b, 8
             , OverrideThrowPredictorBeamPosition
             , RETURN_TO_RIGHT_AFTER_STOLEN_BYTES
             , true);
 
         auto SetBallisticAimingOriginToFrontOfPlayer = [&]()
         {
-            uintptr_t whenAimBombBehindCoverSetPredictorBeamOriginOffsetFromCenterMass = 0x1419F97CE;
+            uintptr_t whenAimBombBehindCoverSetPredictorBeamOriginOffsetFromCenterMass = 0x1419F8A8E;
             PresetScript_CCodeInTheMiddle(whenAimBombBehindCoverSetPredictorBeamOriginOffsetFromCenterMass, 5,
                 WhenAimBombBehindCoverSetPredictorBeamOriginOffsetFromCenterMass_Override, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
         };
@@ -84,6 +84,6 @@ struct BetterAimingFromBehindCover : AutoAssemblerCodeHolder_Base
 };
 BetterAimingFromBehindCover::BetterAimingFromBehindCover()
 {
-    const uintptr_t whenDecidingIfPlayerIsCloseEnoughToTheEdgeOfCoverToAimBombsInThatDirection = 0x1419623FC;
+    const uintptr_t whenDecidingIfPlayerIsCloseEnoughToTheEdgeOfCoverToAimBombsInThatDirection = 0x1419623EC;
     PresetScript_NOP(whenDecidingIfPlayerIsCloseEnoughToTheEdgeOfCoverToAimBombsInThatDirection, 2);
 }

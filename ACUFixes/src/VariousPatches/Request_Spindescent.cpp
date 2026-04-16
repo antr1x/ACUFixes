@@ -32,7 +32,7 @@ static bool IsShouldTryForceDive()
 }
 static bool IsShouldTryForceWallEjectToHang()
 {
-    // Fun fact: to get an almost functional sidehop-to-hang, just NOP 4 bytes at 0x14015423F.
+    // Fun fact: to get an almost functional sidehop-to-hang, just NOP 4 bytes at 0x14015367f.
     return
         g_Config.personalRequests->parkourHelper->diveHelper->isActive
         && g_Config.personalRequests->parkourHelper->diveHelper->allowWallEjectToHang
@@ -74,13 +74,13 @@ CustomSelectedParkourMove SelectBestMatchingMoveIdx_ExtraProcessing_CustomSelect
     for (int i = 0; i < availableParkourActions.size; i++)
     {
         AvailableParkourAction* action = availableParkourActions[i];
-        //constexpr uint64 SwingToSidewall_includingSpindescent_StaticNodes = 0x143A3E170;
+        //constexpr uint64 SwingToSidewall_includingSpindescent_StaticNodes = 0x143A40310;
         //if ((uint64&)action->fancyVTable ==
         //    SwingToSidewall_includingSpindescent_StaticNodes
-        //    //0x143A47FA0         // dive, mb?
-        //    //0x143A4E1D0         // swing turn
-        //    //0x143A13130         // descent from wall to ground; also sidehop
-        //    //0x1439FA6C0
+        //    //0x143a4a140         // dive, mb?
+        //    //0x143a50370         // swing turn
+        //    //0x143a16af0         // descent from wall to ground; also sidehop
+        //    //0x1439fe070
         //)
         EnumParkourAction actionType = action->GetEnumParkourAction();
         if (actionType == EnumParkourAction::swing_2F_SwingToSidewall_includingSpindescent)
@@ -143,7 +143,7 @@ CustomSelectedParkourMove SelectBestMatchingMoveIdx_ExtraProcessing_CustomSelect
     return { nullptr, RESULT_OF_PARKOUR_SORT_AND_SELECT__NO_ACTIONS_ACCEPTED };
 }
 class ParkourAction_Commonbase;
-DEFINE_GAME_FUNCTION(CreateParkourActionForParkourPointIfFits, 0x1401D1CF0, char, __fastcall, (EnumParkourAction a1, uint64 a2, __m128* a3, __m128* p_movementVecWorld_mb, float a5, int a6, char a7, uint64 a8, uint64 a9, uint64 p_currentLedge_mb, ParkourAction_Commonbase** p_newAction_out, float a12, float p_epsilon_mb));
+DEFINE_GAME_FUNCTION(CreateParkourActionForParkourPointIfFits, 0x1401D1260, char, __fastcall, (EnumParkourAction a1, uint64 a2, __m128* a3, __m128* p_movementVecWorld_mb, float a5, int a6, char a7, uint64 a8, uint64 a9, uint64 p_currentLedge_mb, ParkourAction_Commonbase** p_newAction_out, float a12, float p_epsilon_mb));
 void WhenPerformingScanFor_ClimbFacade_AlsoScanForWallToHang(AllRegisters* params)
 {
     if (!IsShouldTryForceWallEjectToHang()) return;
@@ -191,8 +191,8 @@ void WhenPerformingScanFor_BackEject_AlsoScanForWallToHang(AllRegisters* params)
     }
 }
 #include "ACU/Parkour_WhileOnWallSystem.h"
-constexpr uint64 climbFacadeTester_FancyVTable_default = 0x1439E08D0;
-constexpr uint64 climbFacadeTester_FancyVTable_baseclassThatHasSidehopToSwing = 0x1439FA1A0;
+constexpr uint64 climbFacadeTester_FancyVTable_default = 0x1439E4290;
+constexpr uint64 climbFacadeTester_FancyVTable_baseclassThatHasSidehopToSwing = 0x1439FDB50;
 void WhenStartingWallingCycle_ChangeFVTables(AllRegisters* params)
 {
     WhileOnWallSystem* hsWalling = (WhileOnWallSystem*)params->rbx_;
@@ -300,7 +300,7 @@ AvailableParkourAction* ParkourCallbacksForParkourHelpers::ChooseAfterSorting(Sm
         {
             const bool allTheActionsAreTryingToRiseOnLedge = std::all_of(actions.begin(), actions.end(), [](AvailableParkourAction* action)
                 {
-                    return (uint64)action->fancyVTable == 0x1439F41C0;
+                    return (uint64)action->fancyVTable == 0x1439f7b70;
                 });
             if (allTheActionsAreTryingToRiseOnLedge)
             {
@@ -382,14 +382,14 @@ ParkourActionsExtraProcessing::ParkourActionsExtraProcessing()
     m_ParkourCallbacksForParkourHelpers = std::make_unique<ParkourCallbacksForParkourHelpers>();
 
     {
-        PresetScript_CCodeInTheMiddle(0x140135230, 12,
+        PresetScript_CCodeInTheMiddle(0x140136070, 12,
             WhenPerformingScanFor_ClimbFacade_AlsoScanForWallToHang, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-        PresetScript_CCodeInTheMiddle(0x140137A84, 11,
+        PresetScript_CCodeInTheMiddle(0x1401389A4, 11,
             WhenPerformingScanFor_BackEject_AlsoScanForWallToHang, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
-        PresetScript_CCodeInTheMiddle(0x141A4D7CB, 7,
+        PresetScript_CCodeInTheMiddle(0x141A4CBBB, 7,
             WhenStartingWallingCycle_ChangeFVTables, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-        PresetScript_CCodeInTheMiddle(0x141A1BA0C, 7,
+        PresetScript_CCodeInTheMiddle(0x141A1B2DC, 7,
             WhenStartingFailedWallrunCycle_ChangeFVTables, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
         {
             /*
@@ -407,12 +407,12 @@ ParkourActionsExtraProcessing::ParkourActionsExtraProcessing()
             UPD: Can't trigger a we2h to the swing bar at [333.85 641.67 7.03],
                  though the actions are created. Maybe they are discarded because too close to the wall?
             */
-            PresetScript_CCodeInTheMiddle(0x140140E44, 10,
-                WhenSettingAllowedAndExpectedRangesForEjectToHang_MakeThemMorePermissive, 0x140140EDB, false);
-            PresetScript_CCodeInTheMiddle(0x140140DCA, 10,
-                WhenSettingAllowedAndExpectedRangesForEjectToHang_ParkourUp_MakeThemMorePermissive, 0x140140FED, false);
+            PresetScript_CCodeInTheMiddle(0x140141C94, 10,
+                WhenSettingAllowedAndExpectedRangesForEjectToHang_MakeThemMorePermissive, 0x140141d2b, false);
+            PresetScript_CCodeInTheMiddle(0x140141C1A, 10,
+                WhenSettingAllowedAndExpectedRangesForEjectToHang_ParkourUp_MakeThemMorePermissive, 0x140141e3d, false);
         }
-        PresetScript_CCodeInTheMiddle(0x1401AD835, 7,
+        PresetScript_CCodeInTheMiddle(0x1401AD4C5, 7,
             WhenSettingRTCPTargetAngleForTheSelectedParkourAction_AdjustAngleWhenBackEjectToHang, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     }
 }

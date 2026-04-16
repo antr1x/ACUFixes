@@ -219,7 +219,7 @@ public:
     char pad_0115[3]; //0x0115
 
     // @helper_functions
-    static ForgeManager* GetSingleton() { return *(ForgeManager**)0x14525BDB0; }
+    static ForgeManager* GetSingleton() { return *(ForgeManager**)0x14525DCF0; }
     bool IsForgeAlive(ForgeIndex_t forgeIdx)
     {
         return std::find_if(forges.begin(), forges.end(), [&](ForgeFileEntry* forgeEntry)
@@ -237,7 +237,7 @@ public:
     }
     void DecrementForgeRefcount(ForgeIndex_t forgeIdx)
     {
-        auto* ForgeManager__DecrementForgeEntryRefcount_mb = (void (*__fastcall)(ForgeManager* a1, ForgeIndex_t p_forgeIdx))0x142721FE0;
+        auto* ForgeManager__DecrementForgeEntryRefcount_mb = (void (*__fastcall)(ForgeManager* a1, ForgeIndex_t p_forgeIdx))0x142722120;
         ForgeManager__DecrementForgeEntryRefcount_mb(this, forgeIdx);
     }
 }; //Size: 0x0118

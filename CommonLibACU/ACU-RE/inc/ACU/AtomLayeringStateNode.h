@@ -15,7 +15,8 @@ public:
 	char pad_0005[3]; //0x0005
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DEC00; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439E0C10; }
 }; //Size: 0x0008
 assert_sizeof(BoneWeight, 8);
 
@@ -47,7 +48,8 @@ public:
 	char pad_0086[2]; //0x0086
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D9A10; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DBA20; }
 
 }; //Size: 0x0088
 assert_sizeof(AtomLayeringInfo, 0x88);
@@ -69,6 +71,7 @@ public:
 	char pad_014D[3]; //0x014D
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D9960; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DB970; }
 }; //Size: 0x0150
 assert_sizeof(AtomLayeringStateNode, 0x150);

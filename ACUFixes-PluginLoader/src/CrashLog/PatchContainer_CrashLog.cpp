@@ -29,7 +29,7 @@ void CrashLog_TestVariousWaysOfCrashing_DrawImGui()
     {
         // Caught by UnhandledExceptionFilter() only if NOT under a debugger.
         // Caught by ZwRaiseException() only if under a debugger.
-        *(uintptr_t*)0x14521AAD0 = 0;
+        *(uintptr_t*)0x14521CA40 = 0;
     }
     if (ImGui::Button("CRASH GAMETHREAD: Set UEF and write nullptr to game global"))
     {
@@ -38,7 +38,7 @@ void CrashLog_TestVariousWaysOfCrashing_DrawImGui()
                 MessageBoxA(NULL, "Just set the UEF; crash from gamethread", "Crash Log", MB_OK | MB_ICONSTOP);
                 return EXCEPTION_CONTINUE_SEARCH;
             });
-        *(uintptr_t*)0x14521AAD0 = 0;
+        *(uintptr_t*)0x14521CA40 = 0;
     }
     if (ImGui::Button("CRASH GAMETHREAD: Set UEF and write nullptr to game global; call previous handler too"))
     {
@@ -48,7 +48,7 @@ void CrashLog_TestVariousWaysOfCrashing_DrawImGui()
                 MessageBoxA(NULL, "Just set the UEF; crash from gamethread", "Crash Log", MB_OK | MB_ICONSTOP);
                 return prevHandler(exc);
             });
-        *(uintptr_t*)0x14521AAD0 = 0;
+        *(uintptr_t*)0x14521CA40 = 0;
     }
     //if (ImGui::Button("CRASH ACUFIXES SPINTHREAD: Write to nullptr"))
     //{

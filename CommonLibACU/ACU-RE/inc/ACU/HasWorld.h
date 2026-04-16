@@ -25,7 +25,7 @@ public:
     char pad_1CF8[40]; //0x1CF8
 
     // @helper_functions
-    static HasWorld* GetSingleton() { return *(HasWorld**)0x145217368; }
+    static HasWorld* GetSingleton() { return *(HasWorld**)0x1452192D8; }
 }; //Size: 0x1D20
 assert_offsetof(HasWorld, world, 0x98);
 assert_sizeof(HasWorld, 0x1D20);

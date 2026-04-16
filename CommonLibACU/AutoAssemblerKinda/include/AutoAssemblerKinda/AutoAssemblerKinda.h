@@ -121,11 +121,11 @@ This can be turned into the following C++ code:
             allocated_variable = {
                 dq(0)
             };
-            DEFINE_ADDR(maybeSkipParkourScanner, 0x141A4C618);
-            DEFINE_ADDR(__fn1401858D0, 0x1401858D0);
-            DEFINE_ADDR(__fn140185630, 0x140185630);
+            DEFINE_ADDR(maybeSkipParkourScanner, 0x141A4BA08);
+            DEFINE_ADDR(__fn1401858D0, 0x140184DD0);
+            DEFINE_ADDR(__fn140185630, 0x140184B30);
             LABEL(maybeSkipParkourScanner__return);
-            ALLOC(maybeSkipParkourScanner__cave, 0x1000, 0x141A4C618);
+            ALLOC(maybeSkipParkourScanner__cave, 0x1000, 0x141A4BA08);
 
             maybeSkipParkourScanner = {
                 "E9", RIP(maybeSkipParkourScanner__cave),   // - jmp 13FFC0030                                  - needs to be adjusted - relative `jmp` between static and allocated addresses.
@@ -269,7 +269,7 @@ Example:
         {
             ParkourHook()
             {
-                uintptr_t onParkourUpdate = 0x141A4C694;
+                uintptr_t onParkourUpdate = 0x141A4BA84;
                 const bool executeStolenBytes = true;
                 PresetScript_CCodeInTheMiddle(
                     onParkourUpdate, 7,
@@ -302,6 +302,7 @@ Example:
 #include <optional>
 #include <variant>
 #include <string_view>
+#include <cstdarg>
 
 namespace AutoAssemblerKinda {
 typedef unsigned char		byte;		// 8 bits
@@ -465,8 +466,8 @@ class AssemblerContext;
 Just std::vector<CodeElements> but the only constructor is for initializer_list
 to encourage the intended syntax i.e.
 
-    DEFINE_ADDR(whenSomethingHappensThatNeedsToBePatched, 0x1419158E0);
-    ALLOC(whenSomethingHappensThatNeedsToBePatched_cave, 0x80, 0x1419158E0);
+    DEFINE_ADDR(whenSomethingHappensThatNeedsToBePatched, 0x1419fdc70);
+    ALLOC(whenSomethingHappensThatNeedsToBePatched_cave, 0x80, 0x1419fdc70);
 
     whenSomethingHappensThatNeedsToBePatched = {
         db(0xE9), RIP(whenSomethingHappensThatNeedsToBePatched_cave)

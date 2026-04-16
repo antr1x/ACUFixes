@@ -27,8 +27,8 @@ inline char* ACUAllocateString(const std::string_view& s)
     return cstring;
 }
 
-DEFINE_GAME_FUNCTION(SmallArray_generic__AllocateSeparateBuffer, 0x14271F780, void*, __fastcall, (void* p_smallArray, int p_newCap, unsigned int p_align_mb, int p_elementSize, int a5, void* p_heap_mb));
-DEFINE_GAME_FUNCTION(SmallArray_generic__SetNewBuffer, 0x1427260D0, void, __fastcall, (void* p_smallArray, void* p_newBuffer, int p_numElems, __int16 p_capacity, int p_align, char a6, char a7, char a8, char a9));
+DEFINE_GAME_FUNCTION(SmallArray_generic__AllocateSeparateBuffer, 0x14271F920, void*, __fastcall, (void* p_smallArray, int p_newCap, unsigned int p_align_mb, int p_elementSize, int a5, void* p_heap_mb));
+DEFINE_GAME_FUNCTION(SmallArray_generic__SetNewBuffer, 0x1427261D0, void, __fastcall, (void* p_smallArray, void* p_newBuffer, int p_numElems, __int16 p_capacity, int p_align, char a6, char a7, char a8, char a9));
 
 
 template<typename GameTypeWithTypeInfo>
@@ -54,7 +54,7 @@ void SmallArray_GameType_Reserve(SmallArray<GameTypeWithTypeInfo>& arrInOut, uin
 
     if (!heap_mb)
     {
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         heap_mb = g_currentHeap_mb;
     }
 
@@ -74,7 +74,7 @@ void SmallArrayReserve(SmallArray<ElementType>& arrInOut, uint16 newCapacity, vo
 
     if (!heap_mb)
     {
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         heap_mb = g_currentHeap_mb;
     }
 
@@ -105,7 +105,7 @@ GameTypeWithTypeInfo* SmallArray_GameType_Append(SmallArray<GameTypeWithTypeInfo
             newCap = oldCap / 3u + oldCap;
         else
             newCap = oldCap + 4;
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         SmallArray_GameType_Reserve(arrInOut, newCap, g_currentHeap_mb);
     }
     uint16 newSize = arrInOut.size + 1;
@@ -143,7 +143,7 @@ void SmallArrayAppend(SmallArray<ElementType>& arrInOut, const ElementType& newE
             newCap = oldCap / 3u + oldCap;
         else
             newCap = oldCap + 4;
-        void* g_currentHeap_mb = *(void**)0x1452585D0;
+        void* g_currentHeap_mb = *(void**)0x14525a510;
         SmallArrayReserve(arrInOut, newCap, g_currentHeap_mb);
     }
     uint16 newSize = arrInOut.size + 1;
@@ -153,7 +153,7 @@ void SmallArrayAppend(SmallArray<ElementType>& arrInOut, const ElementType& newE
 template<typename ElementType>
 void SmallArrayInsert(SmallArray<ElementType>& arr, ElementType newElem, uint16 insertWhere)
 {
-    void* g_currentHeap_mb = *(void**)0x1452585D0;
+    void* g_currentHeap_mb = *(void**)0x14525a510;
     SmallArrayReserve(arr, arr.size + 1, g_currentHeap_mb);
     arr.size++;
     for (uint16 i = arr.size - 1; i > insertWhere; i--)

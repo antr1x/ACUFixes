@@ -56,6 +56,6 @@ public:
 
 
 	// @helper_functions
-	static AvatarCustomizationManager* GetSingleton() { return *(AvatarCustomizationManager**)0x1451EACA8; }
+	static AvatarCustomizationManager* GetSingleton() { return *(AvatarCustomizationManager**)0x1451ECC30; }
 }; //Size: 0x0100
 assert_sizeof(AvatarCustomizationManager, 0x100);

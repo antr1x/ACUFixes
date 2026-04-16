@@ -18,5 +18,5 @@ public:
     char pad_0378[200]; //0x0378
 
     // @helper_functions
-    static MemoryManager& GetSingleton() { return **(MemoryManager**)(0x145221E08); }
+    static MemoryManager& GetSingleton() { return **(MemoryManager**)(0x145223D78); }
 }; //Size: 0x0440

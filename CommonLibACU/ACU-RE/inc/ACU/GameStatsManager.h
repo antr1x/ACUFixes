@@ -15,7 +15,7 @@ public:
     char pad_01E8[648]; //0x01E8
 
     // @helper_functions
-    static GameStatsManager* GetSingleton() { return *(GameStatsManager**)0x1451D2878; }
+    static GameStatsManager* GetSingleton() { return *(GameStatsManager**)0x1451D4830; }
     int64 GetCurrent_RawIntTimestamp() { return clockUnpausedGame.GetCurrent_RawIntTimestamp(); }
     Clock* GetClock_UnpausedGame() { return clockUnpausedGame.clockPtr; }
 }; //Size: 0x0470

@@ -48,7 +48,7 @@ public:
     char pad_0092[6]; //0x0092
 
     // @helper_functions
-    static TypeInfo& GetTI() { return *(TypeInfo*)0x143E232B0; }
+    static TypeInfo& GetTI() { return *(TypeInfo*)0x143E25290; }
 }; //Size: 0x0098
 assert_offsetof(AvatarGear, inventoryItemSettings, 0x10);
 assert_sizeof(AvatarGear, 0x98);

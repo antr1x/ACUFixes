@@ -25,7 +25,7 @@ public:
     uint64 AddElement(uint64 key) {
         // Returns ptr to element, or `-1` if fails for some reason, I guess?
         // But actual usages in game code don't check for this failure.
-        const auto HashmapGeneric__AddElement = (int64(__fastcall*)(ACUHashmapGeneric* p_hashmap, unsigned __int64 p_key, __int64 p_errorOut_mb))0x14277B2A0;
+        const auto HashmapGeneric__AddElement = (int64(__fastcall*)(ACUHashmapGeneric* p_hashmap, unsigned __int64 p_key, __int64 p_errorOut_mb))0x14277B8B0;
         return HashmapGeneric__AddElement(this, key, 0);
     }
 };

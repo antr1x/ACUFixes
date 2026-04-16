@@ -24,6 +24,6 @@ public:
     char pad_03E0[320]; //0x03E0
 
     // @helper_functions
-    static RenderValuesHolder* GetSingleton() { return *(RenderValuesHolder**)0x14521AAA8; }
+    static RenderValuesHolder* GetSingleton() { return *(RenderValuesHolder**)0x14521CA18; }
 }; //Size: 0x04B0
 assert_offsetof(RenderValuesHolder, matInvProjection, 0x3A0);

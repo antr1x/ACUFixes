@@ -22,6 +22,6 @@ public:
     char pad_0168[776]; //0x0168
 
     // @helper_functions
-    static SoundManager& GetSingleton() { return **(SoundManager**)0x145217298; }
+    static SoundManager& GetSingleton() { return **(SoundManager**)0x145219208; }
 }; //Size: 0x0470
 assert_sizeof(SoundManager, 0x470);

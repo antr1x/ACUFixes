@@ -40,5 +40,5 @@ public:
     char pad_0098[48]; //0x0098
 
     // @helper_functions
-    static WeatherControls& GetSingleton() { return *(WeatherControls*)0x145219DC0; }
+    static WeatherControls& GetSingleton() { return *(WeatherControls*)0x14521BD30; }
 }; //Size: 0x00C8

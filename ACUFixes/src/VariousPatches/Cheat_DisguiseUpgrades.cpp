@@ -7,17 +7,17 @@
 
 UnbreakableDisguise::UnbreakableDisguise()
 {
-    DEFINE_ADDR(whenCheckingIfDisguiseShouldBeBrokenByCombat, 0x141AC2480);
+    DEFINE_ADDR(whenCheckingIfDisguiseShouldBeBrokenByCombat, 0x141ac66b0);
     whenCheckingIfDisguiseShouldBeBrokenByCombat = {
         "C7 02 00000000"        // - mov [rdx],00000000
         "C3"                    // - ret
     };
-    DEFINE_ADDR(whenCheckingIfDisguiseShouldBeBrokenByParkour, 0x141AC71C0);
+    DEFINE_ADDR(whenCheckingIfDisguiseShouldBeBrokenByParkour, 0x141AC1930);
     whenCheckingIfDisguiseShouldBeBrokenByParkour = {
         "C7 02 00000000"        // - mov [rdx],00000000
         "C3"                    // - ret
     };
-    DEFINE_ADDR(whenCheckingIfDisguiseShouldBeBrokenByBeingSeenToCloselyForTooLong, 0x141AB2190);
+    DEFINE_ADDR(whenCheckingIfDisguiseShouldBeBrokenByBeingSeenToCloselyForTooLong, 0x141AB1920);
     whenCheckingIfDisguiseShouldBeBrokenByBeingSeenToCloselyForTooLong = {
         "48 B8 0000000000000000"    // - mov rax,0000000000000000
         "C3"                        // - ret
@@ -26,19 +26,19 @@ UnbreakableDisguise::UnbreakableDisguise()
 }
 DisableDisguiseCooldown::DisableDisguiseCooldown()
 {
-    DEFINE_ADDR(whenCheckingIfDisguiseAvailable_part1, 0x1426618EA);
+    DEFINE_ADDR(whenCheckingIfDisguiseAvailable_part1, 0x142661A4A);
     whenCheckingIfDisguiseAvailable_part1 = {
         "C6 45 E8 01"          // - mov byte ptr [rbp-18],01
         "66 0F1F 44 00 00"     // - nop 6
     };
-    DEFINE_ADDR(whenCheckingIfDisguiseAvailable_part2, 0x1426619F4);
+    DEFINE_ADDR(whenCheckingIfDisguiseAvailable_part2, 0x142661B54);
     whenCheckingIfDisguiseAvailable_part2 = {
         "66 0F1F 44 00 00"     // - nop 6
     };
 }
 DisguiseDoesntMakeYouInvisible::DisguiseDoesntMakeYouInvisible()
 {
-    uintptr_t whenDisguiseActivated_MakeActorInvisible = 0x141AD6A40;
+    uintptr_t whenDisguiseActivated_MakeActorInvisible = 0x141AD5FD0;
     PresetScript_NOP(whenDisguiseActivated_MakeActorInvisible, 5);
 }
 void Cheat_Invisibility_DrawImGui()

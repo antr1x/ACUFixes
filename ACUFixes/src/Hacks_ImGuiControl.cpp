@@ -44,6 +44,7 @@
 void DrawSlowMotionControls();
 void DrawSlowMotionTrickControls();
 void DrawHoodControls();
+void DrawKeepCursorInsideGameWindowControls();
 
 #include "ImGuiConfigUtils.h"
 class MyHacks
@@ -341,6 +342,8 @@ public:
         {
             DrawPersonalRequestsControls();
         }
+        ImGui::Separator();
+        DrawKeepCursorInsideGameWindowControls();
     }
     void DrawCheatsControls()
     {
@@ -476,7 +479,7 @@ public:
                             "   https://www.youtube.com/watch?v=SjgeA2mUs30\n"
                             "(Right click to copy to clipboard)\n"
                             "Fun fact for any modders reading this:\n"
-                            "Simply NOOPing 4 bytes at 0x14015423F\n"
+                            "Simply NOOPing 4 bytes at 0x14015367f\n"
                             "would already give an almost-functional sidehop-to-hang.\n"
                             "Unity can be like that sometimes."
                         );

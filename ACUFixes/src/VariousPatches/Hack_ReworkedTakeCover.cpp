@@ -12,7 +12,7 @@ bool IsTakeCoverPressed()
     return inpCont.keyStates_thisFrame.IsPressed(ActionKeyCode::ParkourUp);
 }
 
-DEFINE_GAME_FUNCTION(WhenTryToTakeCover_IsSpacePressed_mb, 0x1426689A0, char, __fastcall, (__int64 a1, int a2, char a3, char a4));
+DEFINE_GAME_FUNCTION(WhenTryToTakeCover_IsSpacePressed_mb, 0x142668B10, char, __fastcall, (__int64 a1, int a2, char a3, char a4));
 void WhenCheckingIfNeedToTakeCover_ForceIfSpacebarIsPressed(AllRegisters* params)
 {
     const bool shouldSeekCover = IsTakeCoverPressed();
@@ -43,7 +43,7 @@ void WhenLeavingTheCoverBySprintAndForcingSprintStart_DontSprintUnnecessarily(Al
 }
 
 #include "ACU/HumanStatesHolder.h"
-DEFINE_GAME_FUNCTION(createsLeaveCoverFunctor, 0x141979050, char, __fastcall, (FunctorBase* p_node, __m128* p_directionInGroundPlane, float p_wasdMagnitude, char p_doRunOut));
+DEFINE_GAME_FUNCTION(createsLeaveCoverFunctor, 0x141978C60, char, __fastcall, (FunctorBase* p_node, __m128* p_directionInGroundPlane, float p_wasdMagnitude, char p_doRunOut));
 char* g_WhenBehindCover_flag_IsStartedDetaching = nullptr;
 void WhenBehindCoverFunctionPrologue_SaveParams(AllRegisters* params)
 {
@@ -104,7 +104,7 @@ void WhenBehindCoverStandingStillOrMovingAlong_DetachIfTryingToMoveButStuckNowhe
 }
 ReworkedTakeCover::ReworkedTakeCover()
 {
-    uintptr_t whenCheckingIfNeedToTakeCover = 0x1426521C6;
+    uintptr_t whenCheckingIfNeedToTakeCover = 0x142652396;
     PresetScript_CCodeInTheMiddle(
         whenCheckingIfNeedToTakeCover, 5,
         WhenCheckingIfNeedToTakeCover_ForceIfSpacebarIsPressed, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
@@ -114,8 +114,8 @@ ReworkedTakeCover::ReworkedTakeCover()
     // Normally, if you try to move directly away from the cover without sprinting,
     // you need to hold the direction button for 0.15 seconds
     // before actually leaving. Here, I remove the timer.
-    DEFINE_ADDR(whenMovingAwayFromCoverAndCheckingIfTimerForKeypressIsFinished, 0x14192541F);
-    DEFINE_ADDR(whenMovingAwayFromCoverAndKeypressTimerIsFinished, 0x141925455);
+    DEFINE_ADDR(whenMovingAwayFromCoverAndCheckingIfTimerForKeypressIsFinished, 0x14192527F);
+    DEFINE_ADDR(whenMovingAwayFromCoverAndKeypressTimerIsFinished, 0x1419252B5);
     whenMovingAwayFromCoverAndCheckingIfTimerForKeypressIsFinished = {
         db(0xE9), RIP(whenMovingAwayFromCoverAndKeypressTimerIsFinished, 4),
         nop(2)
@@ -127,10 +127,10 @@ ReworkedTakeCover::ReworkedTakeCover()
         // he stops and turns his head away from the corner.
         // Instead of letting him do this, pretend he is moving away from cover.
         // Combined with removed timer, this means Arno immediately unsticks instead of turning his head.
-        DEFINE_ADDR(whenBehindCoverTryingToMove_decideIfAlongOrAway, 0x1419253DB);
-        DEFINE_ADDR(whenBehindCoverTryingToMove_decideIfAlongOrAway__return, 0x1419253DB + 7);
-        DEFINE_ADDR(whenMovingAwayFromCoverInsteadOfAlong, 0x141925412);
-        ALLOC(whenBehindCoverTryingToMove_decideIfAlongOrAway__cave, 0x80, 0x1419253DB);
+        DEFINE_ADDR(whenBehindCoverTryingToMove_decideIfAlongOrAway, 0x14192523B);
+        DEFINE_ADDR(whenBehindCoverTryingToMove_decideIfAlongOrAway__return, 0x14192523B + 7);
+        DEFINE_ADDR(whenMovingAwayFromCoverInsteadOfAlong, 0x141925272);
+        ALLOC(whenBehindCoverTryingToMove_decideIfAlongOrAway__cave, 0x80, 0x14192523B);
 
         whenBehindCoverTryingToMove_decideIfAlongOrAway = {
             db(0xE9), RIP(whenBehindCoverTryingToMove_decideIfAlongOrAway__cave),
@@ -148,18 +148,18 @@ ReworkedTakeCover::ReworkedTakeCover()
     };
     AlsoAllowDetachIfMovingAwayFromOpenCornerTowardWallContinuation();
 
-    uintptr_t whenLeaningAroundTheCornerAndCheckingIfSprintingOutOfTheCover = 0x142656652;
+    uintptr_t whenLeaningAroundTheCornerAndCheckingIfSprintingOutOfTheCover = 0x1426567C2;
     PresetScript_CCodeInTheMiddle(
         whenLeaningAroundTheCornerAndCheckingIfSprintingOutOfTheCover, 8,
         WhenLeaningAroundTheCornerAndCheckingIfSprintingOutOfTheCover_ForceLeave, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
-    uintptr_t whenLeavingTheCoverBySprintAndForcingSprintStart = 0x1419144F1;
+    uintptr_t whenLeavingTheCoverBySprintAndForcingSprintStart = 0x141914621;
     PresetScript_CCodeInTheMiddle(
         whenLeavingTheCoverBySprintAndForcingSprintStart, 5,
         WhenLeavingTheCoverBySprintAndForcingSprintStart_DontSprintUnnecessarily, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
     // Disable `movzx r9d,r12l` that was instead executed in the above hook.
-    uintptr_t whenBehindCoverAndDisallowingBombAimIfSprintIsPressed = 0x14265665C;
+    uintptr_t whenBehindCoverAndDisallowingBombAimIfSprintIsPressed = 0x1426567CC;
     PresetScript_NOP(
         whenBehindCoverAndDisallowingBombAimIfSprintIsPressed, 4);
 
@@ -179,11 +179,11 @@ ReworkedTakeCover::ReworkedTakeCover()
         // I worry this detaching will be sudden enough to provoke instictive change of direction,
         // which might produce the aforementioned direction flips, which might be even more jarring
         // than getting stuck. TBD.
-        uintptr_t whenBehindCoverStandingStillOrMovingAlong = 0x1419261C4;
+        uintptr_t whenBehindCoverStandingStillOrMovingAlong = 0x141926024;
         PresetScript_CCodeInTheMiddle(
             whenBehindCoverStandingStillOrMovingAlong, 6,
             WhenBehindCoverStandingStillOrMovingAlong_DetachIfTryingToMoveButStuckNowhereToGo, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-        uintptr_t whenBehindCover_functionPrologue = 0x141924BC0;
+        uintptr_t whenBehindCover_functionPrologue = 0x141924A20;
         PresetScript_CCodeInTheMiddle(
             whenBehindCover_functionPrologue, 7,
             WhenBehindCoverFunctionPrologue_SaveParams, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);

@@ -4,7 +4,7 @@
 #include "ACU/HumanStatesHolder.h"
 #include "ACU_DefineNativeFunction.h"
 
-DEFINE_GAME_FUNCTION(HumanStatesHolder__OnThrowBomb_P, 0x141988870, void, __fastcall, (HumanStatesHolder* a1, __m128* a2, char a3));
+DEFINE_GAME_FUNCTION(HumanStatesHolder__OnThrowBomb_P, 0x141988480, void, __fastcall, (HumanStatesHolder* a1, __m128* a2, char a3));
 bool WhenAimAndThrowBombAnimationExits_IsShouldForceSpawnBombNow(HumanStatesHolder& humanStates)
 {
     auto integerSignalReceiversManager = humanStates.integerSignalReceiversManager;
@@ -50,9 +50,9 @@ void FunctorAimAndThrowBombExit_fromCover_ThrowBombIfSupposedToAndNotAlreadyThro
 }
 NoMoreFailedBombThrows::NoMoreFailedBombThrows()
 {
-    uintptr_t Functor_AimAndThrowBomb_fromGround_Exit = 0x141A795F0;
-    uintptr_t Functor_AimAndThrowBomb_fromLedge_Exit = 0x141A5A400;
-    uintptr_t Functor_AimAndThrowBomb_fromCover_Exit = 0x1419629C0;
+    uintptr_t Functor_AimAndThrowBomb_fromGround_Exit = 0x141A78A30;
+    uintptr_t Functor_AimAndThrowBomb_fromLedge_Exit = 0x141A59A40;
+    uintptr_t Functor_AimAndThrowBomb_fromCover_Exit = 0x141969500;
     PresetScript_CCodeInTheMiddle(Functor_AimAndThrowBomb_fromGround_Exit, 5,
         FunctorAimAndThrowBombExit_fromGround_ThrowBombIfSupposedToAndNotAlreadyThrown, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     PresetScript_CCodeInTheMiddle(Functor_AimAndThrowBomb_fromLedge_Exit, 6,

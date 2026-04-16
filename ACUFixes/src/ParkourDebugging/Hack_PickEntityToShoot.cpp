@@ -26,7 +26,7 @@ void WhenGettingRangedTargetEntity_OverrideWithPickedOne(AllRegisters* params)
 
 PickEntityToShoot::PickEntityToShoot()
 {
-    uintptr_t whenGettingRangedTargetEntity = 0x141ACDB00;
+    uintptr_t whenGettingRangedTargetEntity = 0x141ACD190;
     PresetScript_CCodeInTheMiddle(whenGettingRangedTargetEntity, 7,
         WhenGettingRangedTargetEntity_OverrideWithPickedOne, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }

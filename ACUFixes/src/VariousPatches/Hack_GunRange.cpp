@@ -11,9 +11,9 @@
 
 #include "ACU/ManagedPtrs/ManagedPtrs.h"
 
-DEFINE_GAME_FUNCTION(Entity__Get_Human1C8, 0x140C17A50, void*, __fastcall, (Entity* entity));
-DEFINE_GAME_FUNCTION(Entity__Get_WeaponComponent, 0x140C1B7E0, WeaponComponent*, __fastcall, (Entity* weaponEntity));
-DEFINE_GAME_FUNCTION(Human1C8__GetCurrentRangedWeaponShared_mb, 0x140C15130, SharedPtrNew<Entity>**, __fastcall, (void* human1C8, SharedPtrNew<Entity>** p_out, char p_0forRangedWeapon));
+DEFINE_GAME_FUNCTION(Entity__Get_Human1C8, 0x140C17520, void*, __fastcall, (Entity* entity));
+DEFINE_GAME_FUNCTION(Entity__Get_WeaponComponent, 0x140C1B330, WeaponComponent*, __fastcall, (Entity* weaponEntity));
+DEFINE_GAME_FUNCTION(Human1C8__GetCurrentRangedWeaponShared_mb, 0x140C14C50, SharedPtrNew<Entity>**, __fastcall, (void* human1C8, SharedPtrNew<Entity>** p_out, char p_0forRangedWeapon));
 WeaponComponent* FindCurrentRangedWeaponComponent(Entity& player)
 {
     // The recreation of `1409E7C10`: `Entity::GetCurrentRangedWeapon_NetFightWeapon_18()`.
@@ -54,8 +54,8 @@ void WhenSearchingForRangedNPCTargetGettingRangedWeaponData_AdjustForWeaponType(
 }
 GuillotineGunRange::GuillotineGunRange()
 {
-    uintptr_t whenSearchingForRangedNPCTargetGettingRangedWeaponData = 0x141A057E9;
-    uintptr_t sameFunctionEpilogue = 0x141A057F8;
+    uintptr_t whenSearchingForRangedNPCTargetGettingRangedWeaponData = 0x141A04EB9;
+    uintptr_t sameFunctionEpilogue = 0x141A04EC8;
     PresetScript_CCodeInTheMiddle(whenSearchingForRangedNPCTargetGettingRangedWeaponData, 5,
         WhenSearchingForRangedNPCTargetGettingRangedWeaponData_AdjustForWeaponType, sameFunctionEpilogue, false);
 }

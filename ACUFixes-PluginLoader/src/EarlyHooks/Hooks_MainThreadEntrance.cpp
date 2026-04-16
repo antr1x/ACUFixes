@@ -125,14 +125,16 @@ during the game's initialization.
 #include "base.h"
 #include "ACU/basic_types.h"
 #include "ACU/Threads/KnownThreads.h"
+#include "EarlyHooks/ThreadOperations.h"
 #include "EarlyHooks/VEH.h"
 
 #include "AutoAssemblerKinda/AutoAssemblerKinda.h"
 #include "external/HwBpLib/inc/HwBpLib.h"
 
 #include "PluginLoaderConfig.h"
-
-#include "MyLog.h"
+#include <bitset>
+#include <array>
+#include <unordered_set>
 
 
 
@@ -237,20 +239,119 @@ void RemoveHardwareBreakpointFromThisThreadDuringException(_EXCEPTION_POINTERS* 
     }
 }
 
-void PluginLoader_WhenGameCodeIsUnpacked();
-
 void WaitForFinishedPluginInit();
 extern bool g_IsMICDisabled;
 void MainIntegrityCheckHasJustBeenDisabledWithoutStarting()
 {
     g_IsMICDisabled = true;
-    LOG_DEBUG(DefaultLogger,
-        "[+] Main Integrity Check has just been disabled without starting.\n"
-    );
     WaitForFinishedPluginInit();
 }
 static DWORD WINAPI EmptyThread(LPVOID lpThreadParameter) { return TRUE; }
-void* g_CodeAddr_WhenEngineInit         = (void*)0x141CD56B0;
+void* g_NtCreateThreadEx                = nullptr;
+
+namespace
+{
+std::unordered_set<DWORD> g_EarlyHwBpArmedThreads;
+
+bool SetExecuteHwBpOnSuspendedThread(HANDLE threadHandle, const void* address)
+{
+    CONTEXT ctx{};
+    ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+    if (::GetThreadContext(threadHandle, &ctx) == FALSE)
+    {
+        return false;
+    }
+
+    std::array<bool, 4> busy{{ (ctx.Dr7 & 1) != 0, (ctx.Dr7 & 4) != 0, (ctx.Dr7 & 16) != 0, (ctx.Dr7 & 64) != 0 }};
+    const auto found = std::find(begin(busy), end(busy), false);
+    if (found == end(busy))
+    {
+        return false;
+    }
+
+    const std::size_t registerIndex = static_cast<std::size_t>(std::distance(begin(busy), found));
+    switch (registerIndex)
+    {
+    case 0: ctx.Dr0 = reinterpret_cast<DWORD_PTR>(const_cast<void*>(address)); break;
+    case 1: ctx.Dr1 = reinterpret_cast<DWORD_PTR>(const_cast<void*>(address)); break;
+    case 2: ctx.Dr2 = reinterpret_cast<DWORD_PTR>(const_cast<void*>(address)); break;
+    case 3: ctx.Dr3 = reinterpret_cast<DWORD_PTR>(const_cast<void*>(address)); break;
+    default: return false;
+    }
+
+    std::bitset<sizeof(ctx.Dr7) * 8> dr7;
+    std::memcpy(&dr7, &ctx.Dr7, sizeof(ctx.Dr7));
+    dr7.set(registerIndex * 2, true);
+    dr7.set(16 + registerIndex * 4 + 1, false);
+    dr7.set(16 + registerIndex * 4, false);
+    dr7.set(16 + registerIndex * 4 + 3, false);
+    dr7.set(16 + registerIndex * 4 + 2, false);
+    std::memcpy(&ctx.Dr7, &dr7, sizeof(ctx.Dr7));
+
+    if (::SetThreadContext(threadHandle, &ctx) == FALSE)
+    {
+        return false;
+    }
+    return true;
+}
+
+void InstallEarlyBreakpointsOnCurrentThread()
+{
+    g_EarlyHwBpArmedThreads.insert(GetCurrentThreadId());
+    HwBp::Set(CreateThread, 1, HwBp::When::Executed);
+
+    if (g_NtCreateThreadEx)
+    {
+        HwBp::Set(g_NtCreateThreadEx, 1, HwBp::When::Executed);
+    }
+}
+
+void InstallEarlyBreakpointsOnThread(ThreadID_t threadID)
+{
+    const DWORD currentThreadId = GetCurrentThreadId();
+    if (threadID == currentThreadId)
+    {
+        return;
+    }
+    if (g_EarlyHwBpArmedThreads.find(threadID) != g_EarlyHwBpArmedThreads.end())
+    {
+        return;
+    }
+
+    HANDLE threadHandle = OpenThread(THREAD_ALL_ACCESS, FALSE, threadID);
+    if (!threadHandle)
+    {
+        return;
+    }
+
+    const DWORD suspendResult = SuspendThread(threadHandle);
+    if (suspendResult == static_cast<DWORD>(-1))
+    {
+        CloseHandle(threadHandle);
+        return;
+    }
+
+    SetExecuteHwBpOnSuspendedThread(threadHandle, CreateThread);
+    if (g_NtCreateThreadEx)
+    {
+        SetExecuteHwBpOnSuspendedThread(threadHandle, g_NtCreateThreadEx);
+    }
+
+    ResumeThread(threadHandle);
+    CloseHandle(threadHandle);
+    g_EarlyHwBpArmedThreads.insert(threadID);
+}
+
+void InstallEarlyBreakpointsOnOtherThreads()
+{
+    ForEachThreadIDOfThisProcess([&](ThreadID_t threadID)
+        {
+            InstallEarlyBreakpointsOnThread(threadID);
+            return false;
+        });
+}
+}
+
 LONG EarlyHooks_HardwareBreakpointsHandler(::_EXCEPTION_POINTERS* ExceptionInfo)
 {
     void* ExceptionAddress = ExceptionInfo->ExceptionRecord->ExceptionAddress;
@@ -258,38 +359,35 @@ LONG EarlyHooks_HardwareBreakpointsHandler(::_EXCEPTION_POINTERS* ExceptionInfo)
     {
         ExceptionInfo->ContextRecord->EFlags |= EFLAGS_MASK_RF;
         uintptr_t startAddress = ExceptionInfo->ContextRecord->R8;
-        if (startAddress == ACU::Threads::ThreadStartAddr_MainIntegrityCheck)
+        const uintptr_t expectedMICStartAddress = ResolveMainIntegrityCheckThreadStartAddress();
+        if (IsEquivalentThreadStartAddress(startAddress, expectedMICStartAddress))
         {
             RemoveHardwareBreakpointFromThisThreadDuringException(ExceptionInfo, CreateThread);
             ExceptionInfo->ContextRecord->R8 = (DWORD64)EmptyThread;
-            //MessageBoxF(
-            //    "MIC DOA.\n"
-            //);
             MainIntegrityCheckHasJustBeenDisabledWithoutStarting();
             g_EarlyHooks_VEHandler.reset();
         }
         return EXCEPTION_CONTINUE_EXECUTION;
     }
-    else if (ExceptionAddress == g_CodeAddr_WhenEngineInit)
+    else if (ExceptionAddress == g_NtCreateThreadEx)
     {
         ExceptionInfo->ContextRecord->EFlags |= EFLAGS_MASK_RF;
-        RemoveHardwareBreakpointFromThisThreadDuringException(ExceptionInfo, g_CodeAddr_WhenEngineInit);
-        PluginLoader_WhenGameCodeIsUnpacked();
+        const uintptr_t startAddress = *reinterpret_cast<uintptr_t*>(ExceptionInfo->ContextRecord->Rsp + 0x28);
+        const uintptr_t expectedMICStartAddress = ResolveMainIntegrityCheckThreadStartAddress();
+        if (IsEquivalentThreadStartAddress(startAddress, expectedMICStartAddress))
+        {
+            RemoveHardwareBreakpointFromThisThreadDuringException(ExceptionInfo, g_NtCreateThreadEx);
+            *reinterpret_cast<uintptr_t*>(ExceptionInfo->ContextRecord->Rsp + 0x28) = reinterpret_cast<uintptr_t>(EmptyThread);
+            MainIntegrityCheckHasJustBeenDisabledWithoutStarting();
+            g_EarlyHooks_VEHandler.reset();
+        }
         return EXCEPTION_CONTINUE_EXECUTION;
     }
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
 
-
-
-
-
-
-
-
 void WhenReadyForInitialLoadingOfPlugins();
-void WaitForInitialLoadingOfPluginsToFinish();
 /*
 In here, I'm in the Context of the MainThread, free of the DLLMain and Loader Lock,
 which means I can use Hardware Breakpoints (on the threads I can access).
@@ -311,14 +409,11 @@ void DoImmediatelyAtTheStartOfGamesMainThread()
             "\"Extra->Show developer options->Show a MessageBox at the start of game's Main Thread\"\n"
             "or in the Plugin Loader config file."
         );
-    LOG_DEBUG(DefaultLogger,
-        "[+] Running at the very start of game's main thread...\n"
-    );
-    WhenReadyForInitialLoadingOfPlugins();
-    WaitForInitialLoadingOfPluginsToFinish();
+    g_NtCreateThreadEx = GetProcAddress(GetModuleHandleA("ntdll.dll"), "NtCreateThreadEx");
     g_EarlyHooks_VEHandler.emplace(1, EarlyHooks_HardwareBreakpointsHandler);
-    HwBp::Set(CreateThread, 1, HwBp::When::Executed);
-    HwBp::Set(g_CodeAddr_WhenEngineInit, 1, HwBp::When::Executed);
+    InstallEarlyBreakpointsOnCurrentThread();
+    InstallEarlyBreakpointsOnOtherThreads();
+    WhenReadyForInitialLoadingOfPlugins();
 }
 
 void BeforeGameMainThreadStarted_HookTheStartAddress()

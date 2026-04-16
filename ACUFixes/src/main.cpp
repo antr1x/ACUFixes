@@ -19,6 +19,7 @@ std::optional<MyLogFileLifetime> g_LogLifetime;
 void ImGuiLayer_EvenWhenMenuIsClosed();
 void ImGuiLayer_WhenMenuIsOpen();
 void ApplyAnimationGraphMods();
+
 class ACUFixes_TheFixesPlugin : public ACUPluginInterfaceVirtuals
 {
 public:
@@ -32,7 +33,7 @@ public:
     }
     virtual uint64 GetThisPluginVersion() override
     {
-        return MAKE_VERSION_NUMBER_UINT64(0, 0, 1, 0);
+        return MAKE_VERSION_NUMBER_UINT64(0, 0, 2, 0);
     }
     virtual void InitStage_WhenPluginAPIDeemedCompatible() override
     {

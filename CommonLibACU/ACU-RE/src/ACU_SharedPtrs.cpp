@@ -4,10 +4,10 @@
 #include "ACU/SharedPtr.h"
 #include "ACU_DefineNativeFunction.h"
 
-DEFINE_GAME_FUNCTION(AllManagedObjects__FindOrMakeSharedBlockByHandle_WeakRef, 0x1426EAF00, SharedBlock*, __fastcall, (AllManagedObjects_mb* objList, __int64 p_managedObjHandle_mb_opt, ManagedObject* a3));
-DEFINE_GAME_FUNCTION(AllManagedObjects__FindOrMakeSharedBlockByHandle_StrongRef, 0x1426EB640, SharedBlock*, __fastcall, (AllManagedObjects_mb* objList, __int64 p_managedObjHandle_mb_opt, ManagedObject* a3));
-DEFINE_GAME_FUNCTION(AllManagedObjects__FreeSharedBlock_mb, 0x1426EC8E0, void, __fastcall, (AllManagedObjects_mb* objList, SharedBlock* a2));
-DEFINE_GAME_FUNCTION(AllManagedObjects__MarkObjectToBeFreedAfterZeroStrongRefcount, 0x142701270, void, __fastcall, (AllManagedObjects_mb* objList, SharedBlock* a2));
+DEFINE_GAME_FUNCTION(AllManagedObjects__FindOrMakeSharedBlockByHandle_WeakRef, 0x1426EB0A0, SharedBlock*, __fastcall, (AllManagedObjects_mb* objList, __int64 p_managedObjHandle_mb_opt, ManagedObject* a3));
+DEFINE_GAME_FUNCTION(AllManagedObjects__FindOrMakeSharedBlockByHandle_StrongRef, 0x1426EB7E0, SharedBlock*, __fastcall, (AllManagedObjects_mb* objList, __int64 p_managedObjHandle_mb_opt, ManagedObject* a3));
+DEFINE_GAME_FUNCTION(AllManagedObjects__FreeSharedBlock_mb, 0x1426EC9A0, void, __fastcall, (AllManagedObjects_mb* objList, SharedBlock* a2));
+DEFINE_GAME_FUNCTION(AllManagedObjects__MarkObjectToBeFreedAfterZeroStrongRefcount, 0x1427011F0, void, __fastcall, (AllManagedObjects_mb* objList, SharedBlock* a2));
 void MarkManagedObjectForFreeingAfterZeroStrongRefcount_impl(SharedBlock& sharedBlock)
 {
     AllManagedObjects__MarkObjectToBeFreedAfterZeroStrongRefcount(&AllManagedObjects_mb::GetSingleton(), &sharedBlock);

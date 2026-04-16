@@ -35,7 +35,8 @@ public:
 	char pad_0018[8]; //0x0018
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D9C90; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DBCA0; }
 }; //Size: 0x0020
 assert_sizeof(AtomInputPort, 0x20);
 
@@ -48,7 +49,8 @@ public:
 	char pad_000C[4]; //0x000C
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D9D40; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DBD50; }
 }; //Size: 0x0010
 assert_sizeof(AtomOutputPort, 0x10);
 

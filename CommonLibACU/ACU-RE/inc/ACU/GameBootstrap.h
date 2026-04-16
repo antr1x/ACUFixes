@@ -15,7 +15,7 @@ public:
 	SharedPtrNew<GameBootstrap>* shared_bootstrap;
 
 	// @helper_functions
-	static HasBootstrapSharedPtr* GetSingleton() { return *(HasBootstrapSharedPtr**)0x145221998; }
+	static HasBootstrapSharedPtr* GetSingleton() { return *(HasBootstrapSharedPtr**)0x145223908; }
 };
 assert_sizeof(HasBootstrapSharedPtr, 8);
 

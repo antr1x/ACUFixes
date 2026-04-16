@@ -138,7 +138,7 @@ public:
     char pad_006C[4]; //0x006C
 
     // @helper_functions
-    static TypeInfo& GetTI() { return *(TypeInfo*)0x1439CD110; }
-    static constexpr uint64 GetVTBL() { return 0x142E7ACC0; }
+    static TypeInfo& GetTI() { return *(TypeInfo*)0x1439CF110; }
+    static constexpr uint64 GetVTBL() { return 0x142E7BC40; }
 }; //Size: 0x0070
 assert_sizeof(Animation, 0x70);

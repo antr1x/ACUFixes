@@ -10,13 +10,97 @@
 
 using AutoAssemblerKinda::byte;
 
+namespace
+{
+HANDLE GetCurrentProcessForRemoteStylePatch()
+{
+    static HANDLE process = OpenProcess(
+        PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE,
+        FALSE,
+        GetCurrentProcessId());
+    return process;
+}
+
+bool TryWriteWithWriteProcessMemory(HANDLE process, void* dst, SIZE_T size, const void* src)
+{
+    SIZE_T written = 0;
+    BOOL ok = WriteProcessMemory(process, dst, src, size, &written);
+    return ok && written == size;
+}
+
+// Using an "external" style write path here for now because the internal one kept giving me
+// a high-five (err 5) when attempting the PAGE_READWRITE flip.
+// Could be Ubisoft, could be me.
+//
+// Since this works, I;m leaving it as a certified "future me can suffer about it later"
+// solution for now. I was tired updating this huge project onto the 1.5.1 game version in just a few
+// days (a monumental project the original author built up over years), so hopefully nobody lynches me
+// if this one turns out to be my fault. Atleast not too hard, lol :)
+bool TryPatchWithRemoteStyleApis(void* dst, SIZE_T size, const void* src)
+{
+    HANDLE process = GetCurrentProcessForRemoteStylePatch();
+    if (!process)
+    {
+        return false;
+    }
+
+    DWORD oldProtect = 0;
+    BOOL vpOk = VirtualProtectEx(process, dst, size, PAGE_EXECUTE_READWRITE, &oldProtect);
+    if (!vpOk)
+    {
+        vpOk = VirtualProtectEx(process, dst, size, PAGE_EXECUTE_WRITECOPY, &oldProtect);
+    }
+
+    bool writeOk = false;
+    if (vpOk)
+    {
+        writeOk = TryWriteWithWriteProcessMemory(process, dst, size, src);
+        DWORD restoredProtect = 0;
+        VirtualProtectEx(process, dst, size, oldProtect, &restoredProtect);
+    }
+    else
+    {
+        writeOk = TryWriteWithWriteProcessMemory(process, dst, size, src);
+    }
+
+    FlushInstructionCache(process, dst, size);
+    return writeOk;
+}
+
+bool TryPatchWithLocalApis(void* dst, SIZE_T size, const void* src)
+{
+    DWORD oldProtect = 0;
+    BOOL vpOk = VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldProtect);
+    if (!vpOk)
+    {
+        vpOk = VirtualProtect(dst, size, PAGE_EXECUTE_WRITECOPY, &oldProtect);
+    }
+    if (!vpOk)
+    {
+        return false;
+    }
+
+    __try
+    {
+        memcpy(dst, src, size);
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        return false;
+    }
+
+    DWORD restoredProtect = 0;
+    VirtualProtect(dst, size, oldProtect, &restoredProtect);
+    FlushInstructionCache(GetCurrentProcess(), dst, size);
+    return true;
+}
+}
 
 SYSTEM_INFO& GetCachedSystemInfo()
 {
     static SYSTEM_INFO sysinfo = []() {SYSTEM_INFO sysinfo; GetSystemInfo(&sysinfo); return sysinfo; }();
     return sysinfo;
 }
-#define dprintf(...)
 // From `<Cheat Engine source>/Cheat Engine/memoryquery.pas`, Windows version.
 void* FindFreeBlockForRegion(uintptr_t base, unsigned int size)
 {
@@ -54,15 +138,11 @@ void* FindFreeBlockForRegion(uintptr_t base, unsigned int size)
         if (maxAddress > uintptr_t(systeminfo.lpMaximumApplicationAddress) || maxAddress < uintptr_t(systeminfo.lpMinimumApplicationAddress))
             maxAddress = uintptr_t(systeminfo.lpMaximumApplicationAddress);
     }
-    dprintf("minaddress=%.16llx", minAddress);
-    dprintf("maxaddress=%.16llx", maxAddress);
-
     b = minAddress;
 
     ZeroMemory(&mbi, sizeof(mbi));
     while (VirtualQuery((LPCVOID)b, &mbi, sizeof(mbi)) == sizeof(mbi))
     {
-        dprintf("  +VQ: allocBase:%llx, pageBase: %llx, regionSize:%x, state: %x ", uintptr_t(mbi.AllocationBase), mbi.BaseAddress, mbi.RegionSize, mbi.State);
         if ((ptrUint)mbi.BaseAddress > maxAddress) { return nullptr; } //no memory found, just return 0 and let windows decide
         if (mbi.State == MEM_FREE && mbi.RegionSize > size)
         {
@@ -86,13 +166,11 @@ void* FindFreeBlockForRegion(uintptr_t base, unsigned int size)
                     //if the difference is closer then use that
                     if (result == nullptr) {
                         result = (void*)x;
-                        dprintf("1 result: %llx", result);
                     }
                     else
                     {
                         if (abs(ptrInt(x - base)) < abs(ptrInt(ptrUint(result) - base))) {
                             result = (void*)x;
-                            dprintf("2 result: %llx", result);
                         }
                     }
                 }
@@ -113,13 +191,11 @@ void* FindFreeBlockForRegion(uintptr_t base, unsigned int size)
                 }
                 if (result == nullptr) {
                     result = (void*)x;
-                    dprintf("3 result: %llx", result);
                 }
                 else
                 {
                     if (abs(ptrInt(x - base)) < abs(ptrInt(ptrUint(result) - base))) {
                         result = (void*)x;
-                        dprintf("4 result: %llx", result);
                     }
                 }
             }
@@ -132,23 +208,21 @@ void* FindFreeBlockForRegion(uintptr_t base, unsigned int size)
         b = ptrUint(mbi.BaseAddress) + mbi.RegionSize;
 
         if (b > maxAddress) {
-            dprintf("b>maxAddress; result: %llx, b: %llx, oldb: %llx", result, b, oldb);
             return result;
         }
         if (oldb > b) {
-            dprintf("overflow; b: %llx, oldb: %llx", b, oldb);
             return result; //overflow
         }
     }
-    dprintf("returning; result: %llx, b: %llx, oldb: %llx", result, b, oldb);
     return result;
 }
 void PatchMemory(void* dst, SIZE_T size, const void* src)
 {
-    DWORD oldProtect;
-    VirtualProtect(dst, size, PAGE_EXECUTE_READWRITE, &oldProtect);
-    memcpy(dst, src, size);
-    VirtualProtect(dst, size, oldProtect, &oldProtect);
+    if (TryPatchWithRemoteStyleApis(dst, size, src))
+    {
+        return;
+    }
+    TryPatchWithLocalApis(dst, size, src);
 }
 
 void WriteableSymbol::Write()

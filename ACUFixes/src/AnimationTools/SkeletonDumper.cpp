@@ -222,7 +222,7 @@ void ExportSkeletonsAsJSON(SkeletonComponent& skelCpnt)
 }
 const ImVec4 colorTextRed = ImVec4(1.0f, 0.4f, 0.4f, 1.0f);
 
-constexpr uint64 vtbl_SkeletonComponent = 0x142E76630;
+constexpr uint64 vtbl_SkeletonComponent = 0x142E77620;
 SkeletonComponent* GetEntityCpnt_SkeletonComponent(Entity& entity)
 {
     return static_cast<SkeletonComponent*>(entity.FindComponentByVTBL(vtbl_SkeletonComponent));

@@ -49,8 +49,8 @@ void WhenOutOfMissionEquippingTheLantern_SubstituteNormalLanternWithTheMagicalOn
 
 ActionAbilitySet* FindAbilitySetActionInTheOperatorDatas(SmallArray<DominoOperatorData*>& arrOperatorData)
 {
-    constexpr uintptr_t AIActionEntityOperatorData_VTBL = 0x142FE7BF0;
-    constexpr uintptr_t ActionAbilitySet_VTBL = 0x142F95D10;
+    constexpr uintptr_t AIActionEntityOperatorData_VTBL = 0x142FE8D40;
+    constexpr uintptr_t ActionAbilitySet_VTBL = 0x142F96CB0;
     for (DominoOperatorData* operatorData : arrOperatorData)
     {
         uintptr_t currentOpDataVTBL = *(uintptr_t*)operatorData;
@@ -75,7 +75,7 @@ ActionAbilitySet* FindAbilitySetActionInTheOperatorDatas(SmallArray<DominoOperat
 }
 AssassinAbilitySet* FindAssassinAbilitySetUsedForTheLanternSequence(Entity& lanternEntity)
 {
-    constexpr uintptr_t dominoCpntVTBL = 0x1430640C0;
+    constexpr uintptr_t dominoCpntVTBL = 0x143065310;
     Component* foundDominoCpnt = lanternEntity.FindComponentByVTBL(dominoCpntVTBL);
     if (!foundDominoCpnt) { return nullptr; }
     DominoComponent* domCpnt = static_cast<DominoComponent*>(foundDominoCpnt);
@@ -219,7 +219,7 @@ void WhenUnsheatheLanternAndPlaySound_FixBatlampNoise(AllRegisters* params)
 #include "ACU/GamePlaySettings.h"
 #include "ACU/AvatarGearManager.h"
 #include "ACU_DefineNativeFunction.h"
-DEFINE_GAME_FUNCTION(AddAvatarGear, 0x140D2B370, void, __fastcall, (AvatarLoadout* a1, AvatarGear* p_avatarGear));
+DEFINE_GAME_FUNCTION(AddAvatarGear, 0x140D2B160, void, __fastcall, (AvatarLoadout* a1, AvatarGear* p_avatarGear));
 void TryAddLanternManually()
 {
     auto* ppm = PlayerProgressionManager::GetSingleton();
@@ -234,15 +234,15 @@ void TryAddLanternManually()
 }
 BatlampOfFrancide::BatlampOfFrancide()
 {
-    uintptr_t whenOutOfMissionEquippingTheLantern = 0x140D2B330;
+    uintptr_t whenOutOfMissionEquippingTheLantern = 0x140D2B120;
     PresetScript_CCodeInTheMiddle(
         whenOutOfMissionEquippingTheLantern, 6,
         WhenOutOfMissionEquippingTheLantern_SubstituteNormalLanternWithTheMagicalOne, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenLanternCpntIsUpdated = 0x142663532;
+    uintptr_t whenLanternCpntIsUpdated = 0x1426636A2;
     PresetScript_CCodeInTheMiddle(
         whenLanternCpntIsUpdated, 5,
         WhenLanternCpntIsUpdated_ManageLanternModes, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenUnsheatheLanternPlaySound = 0x140585372;
+    uintptr_t whenUnsheatheLanternPlaySound = 0x1405832B2;
     PresetScript_CCodeInTheMiddle(
         whenUnsheatheLanternPlaySound, 7,
         WhenUnsheatheLanternAndPlaySound_FixBatlampNoise, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);

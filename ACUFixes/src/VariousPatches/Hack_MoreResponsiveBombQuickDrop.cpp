@@ -48,7 +48,7 @@ void WhenCheckingIfBombShouldBeQuickDropped_ForceIfSprinting(AllRegisters* param
 }
 LessFinickyBombQuickDrop::LessFinickyBombQuickDrop()
 {
-    uintptr_t whenCheckingIfBombShouldBeQuickDropped = 0x142666F8F;
+    uintptr_t whenCheckingIfBombShouldBeQuickDropped = 0x1426670FF;
     PresetScript_CCodeInTheMiddle(whenCheckingIfBombShouldBeQuickDropped, 7,
         WhenCheckingIfBombShouldBeQuickDropped_ForceIfSprinting, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 }
@@ -60,7 +60,7 @@ LessFinickyBombQuickDrop::LessFinickyBombQuickDrop()
 
 
 
-DEFINE_GAME_FUNCTION(SmallArray_DWORD__AppendIfNotPresent_mb, 0x140B8E8F0, void, __fastcall, (SmallArray<uint32>* arr, uint32* newElement));
+DEFINE_GAME_FUNCTION(SmallArray_DWORD__AppendIfNotPresent_mb, 0x140D240E0, void, __fastcall, (SmallArray<uint32>* arr, uint32* newElement));
 void MoveElementToStart(SmallArray<uint32>& arr, uint32 elem)
 {
     int initialPos = (int)(std::find(arr.begin(), arr.end(), elem) - arr.begin());
@@ -142,7 +142,7 @@ void WhenFillingArrayOfStateEnumsToUpdate_EnableChecksForBombQuickDrop(AllRegist
 
 class HasLanterndlcComponent;
 class HumanStatesHolder;
-DEFINE_GAME_FUNCTION(UpdateState_ReloadRangedWeapon, 0x142663A40, __int64, __fastcall, (HasLanterndlcComponent* a1, HumanStatesHolder* a2, unsigned __int8 a3));
+DEFINE_GAME_FUNCTION(UpdateState_ReloadRangedWeapon, 0x142663BB0, __int64, __fastcall, (HasLanterndlcComponent* a1, HumanStatesHolder* a2, unsigned __int8 a3));
 void WhenUpdateGunReloadChecker_DisableIfQuickdropWasForceEnabled(AllRegisters* params)
 {
     if (g_BombQuickthrowEnabler_bombDropCheckerHasBeenForceEnabledThisFrame)
@@ -213,7 +213,7 @@ void WhenSuccessfullyStartingToDropBomb_RememberSuccess(AllRegisters* params)
         g_BombQuickthrowEnabler_isNeedToFixRightArm = true;
     }
 }
-DEFINE_GAME_FUNCTION(sub_142666AE0, 0x142666AE0, char, __fastcall, (HasLanterndlcComponent* a1));
+DEFINE_GAME_FUNCTION(sub_142666AE0, 0x142666C50, char, __fastcall, (HasLanterndlcComponent* a1));
 void WhenCombatActionsAreUpdatedChecksBombDrop_DisableOriginalBombDropHandlingInCombat(AllRegisters* params)
 {
     if (IsBombQuickdropEnabledInCombat())
@@ -390,7 +390,7 @@ void FixReactionRadiusDatas()
         }
     }
 }
-DEFINE_GAME_FUNCTION(onQuickshot_PX, 0x14265DDD0, __int64, __fastcall, (HasLanterndlcComponent* a1, HumanStatesHolder* rdx0, char a3));
+DEFINE_GAME_FUNCTION(onQuickshot_PX, 0x14265DF30, __int64, __fastcall, (HasLanterndlcComponent* a1, HumanStatesHolder* rdx0, char a3));
 void WhenUpdatingOutOfCombatVersionOfQuickshot_DisableWhenInCombat(AllRegisters* params)
 {
     if (IsBombQuickdropEnabledInCombat())
@@ -420,7 +420,7 @@ void WhenCheckingIfLeaveCombatBySprint_MakeSureIsReallyTryingToSprint(AllRegiste
     }
 }
 
-DEFINE_GAME_FUNCTION(DisableThisToMagicallyUnbreakAssassinationsAndDropBombs, 0x14265DDA0, uint32, __fastcall, (HasLanterndlcComponent* a1, HumanStatesHolder* a2, unsigned __int8 a3));
+DEFINE_GAME_FUNCTION(DisableThisToMagicallyUnbreakAssassinationsAndDropBombs, 0x14265DF00, uint32, __fastcall, (HasLanterndlcComponent* a1, HumanStatesHolder* a2, unsigned __int8 a3));
 void WhenMakingSomeStrangeCallInNoncombatUpdates(AllRegisters* params)
 {
     if (g_BombQuickthrowEnabler_bombDropCheckerHasBeenForceEnabledThisFrame)
@@ -437,7 +437,7 @@ void WhenMakingSomeStrangeCallInNoncombatUpdates(AllRegisters* params)
 #include "ACU/HumanStatesHolder.h"
 bool IsInHaystack(HumanStatesHolder& humanStates)
 {
-    const uint64 haystackState_Enter = 0x1419DECC0;
+    const uint64 haystackState_Enter = 0x1419DE0A0;
     for (auto& primaryReceiver : humanStates.primaryCallbackReceivers)
     {
         const uint64 currNode_Enter = (uint64)primaryReceiver.pNode->Enter;
@@ -449,7 +449,7 @@ bool IsInHaystack(HumanStatesHolder& humanStates)
     return false;
 }
 #include "ACU/Enum_EquipmentType.h"
-DEFINE_GAME_FUNCTION(oneOfThoseFns_whenTryToStartAimBomb, 0x14198F020, int, __fastcall, (HumanStatesHolder* p_humanStates, __int64 a2, EquipmentType p_bombEquipType, __int64 a4));
+DEFINE_GAME_FUNCTION(oneOfThoseFns_whenTryToStartAimBomb, 0x14198EB50, int, __fastcall, (HumanStatesHolder* p_humanStates, __int64 a2, EquipmentType p_bombEquipType, __int64 a4));
 void WhenLongPressedToAimBomb_DontTryIfInHaystack(AllRegisters* params)
 {
     auto* humanStates = (HumanStatesHolder*)params->rcx_;
@@ -473,13 +473,13 @@ void WhenLongPressedToAimBomb_DontTryIfInHaystack(AllRegisters* params)
 MoreSituationsToDropBomb::MoreSituationsToDropBomb()
 {
     auto WhenBuildingArrayOfStatesToBeUpdated_AddQuickdropChecker = [&]() {
-        uintptr_t whenFillingArrayOfStateEnumsToUpdate = 0x142656F47;
+        uintptr_t whenFillingArrayOfStateEnumsToUpdate = 0x1426570B7;
         PresetScript_CCodeInTheMiddle(whenFillingArrayOfStateEnumsToUpdate, 5,
             WhenFillingArrayOfStateEnumsToUpdate_EnableChecksForBombQuickDrop, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
     auto DisableGunReloadIfQuickdropWasForceEnabled = [&]() {
-        uintptr_t whenUpdateGunReloadChecker = 0x14265D18E;
-        uintptr_t whenUpdateGunReloadChecker_return = 0x14265D18E;
+        uintptr_t whenUpdateGunReloadChecker = 0x14265D2EE;
+        uintptr_t whenUpdateGunReloadChecker_return = 0x14265D2EE;
         PresetScript_CCodeInTheMiddle(whenUpdateGunReloadChecker, 5,
             WhenUpdateGunReloadChecker_DisableIfQuickdropWasForceEnabled, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
@@ -497,7 +497,7 @@ MoreSituationsToDropBomb::MoreSituationsToDropBomb()
         // Why is it called every frame? I dunno.
         // This strange fix consists of _not_ making that strange call if the "bomb drop updater"
         // was force enabled for the current frame.
-        uintptr_t whenMakingSomeStrangeCallInTheNoncombatUpdates = 0x14265D137;
+        uintptr_t whenMakingSomeStrangeCallInTheNoncombatUpdates = 0x14265D297;
         PresetScript_CCodeInTheMiddle(whenMakingSomeStrangeCallInTheNoncombatUpdates, 5,
             WhenMakingSomeStrangeCallInNoncombatUpdates, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
@@ -507,58 +507,58 @@ MoreSituationsToDropBomb::MoreSituationsToDropBomb()
     DisableGunReloadIfQuickdropWasForceEnabled();
 
     // Also allow during a wallrun and when standing in the V-shape of a tree or flagpole.
-    uintptr_t whenCheckingIfShouldDisallowDropBombInWallrunAndTrees = 0x141AA7C51;
+    uintptr_t whenCheckingIfShouldDisallowDropBombInWallrunAndTrees = 0x141AA7291;
     PresetScript_CCodeInTheMiddle(whenCheckingIfShouldDisallowDropBombInWallrunAndTrees, 5,
         WhenCheckingIfShouldDisallowDropBombInWallrunAndTrees_DisobeyOrders, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 
     // Also allow during movement on steep slopes (like Notre Dame's).
     // This is actually independent from the above hacks.
-    uintptr_t whenCheckingIfShouldDisallowDropBombOnSlopes = 0x142667042;
+    uintptr_t whenCheckingIfShouldDisallowDropBombOnSlopes = 0x1426671B2;
     PresetScript_CCodeInTheMiddle(whenCheckingIfShouldDisallowDropBombOnSlopes, 6,
         WhenCheckingIfShouldDisallowDropBombOnSlopes_DisobeyOrders, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
 
     // Also allow during social stealth interaction like sitting on a bench, leaning on a wall.
-    uintptr_t whenCheckingIfDropbombIsAvailableInAbilitySets = 0x142664422;
+    uintptr_t whenCheckingIfDropbombIsAvailableInAbilitySets = 0x142664592;
     PresetScript_NOP(whenCheckingIfDropbombIsAvailableInAbilitySets, 6);
 
 
-    uintptr_t whenSuccessfullyStartingToDropBomb = 0x141A2C040;
+    uintptr_t whenSuccessfullyStartingToDropBomb = 0x141a2a560;
     PresetScript_CCodeInTheMiddle(whenSuccessfullyStartingToDropBomb, 6,
         WhenSuccessfullyStartingToDropBomb_RememberSuccess, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
-    uintptr_t whenDropBombAnimationEnds = 0x141AA7DF0;
+    uintptr_t whenDropBombAnimationEnds = 0x141AA7430;
     PresetScript_CCodeInTheMiddle(whenDropBombAnimationEnds, 5,
         WhenDropBombAnimationEnds_ClearBombDropFlags, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
-    uintptr_t whenDropBombCheckerFinishes = 0x14265764C;
-    uintptr_t whenDropBombCheckerFinishes_returnTo = 0x1426577BD;
+    uintptr_t whenDropBombCheckerFinishes = 0x1426577BC;
+    uintptr_t whenDropBombCheckerFinishes_returnTo = 0x14265792D;
     PresetScript_CCodeInTheMiddle(whenDropBombCheckerFinishes, 5,
         WhenDropBombCheckerFinishes_PretendArnoIsInHighProfileIfItsNeededToFixAnimations, whenDropBombCheckerFinishes_returnTo, false);
 
-    uintptr_t whenHighProfileMovementIsDecided_insideGetter = 0x1409D9700;
+    uintptr_t whenHighProfileMovementIsDecided_insideGetter = 0x1409D91C0;
     PresetScript_CCodeInTheMiddle(whenHighProfileMovementIsDecided_insideGetter, 5,
         WhenHighProfileMovementIsDecided_insideGetter_PretendArnoIsInHighProfileIfItsNeededToFixAnimations, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
     auto AlsoAllowBombDropWhenHangingOnWallAndTheresAssassinationTargetAvailableBelow = [&]()
     {
-        uintptr_t whenOnWallCheckingIfAssassinateAttemptTargetAvailable = 0x142651B03;
+        uintptr_t whenOnWallCheckingIfAssassinateAttemptTargetAvailable = 0x142651CD3;
         PresetScript_CCodeInTheMiddle(whenOnWallCheckingIfAssassinateAttemptTargetAvailable, 7,
             WhenOnWallCheckingIfAssassinateAttemptTargetAvailable_DisableIfBombJustDropped, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
     AlsoAllowBombDropWhenHangingOnWallAndTheresAssassinationTargetAvailableBelow();
 
-    uintptr_t whenStatesUpdaterFinishes = 0x1426572B1;
+    uintptr_t whenStatesUpdaterFinishes = 0x142657421;
     PresetScript_CCodeInTheMiddle(whenStatesUpdaterFinishes, 7,
         WhenStatesUpdaterFinishes_ClearFlagsForFrame, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
 
     auto PreventDoubleBombDropInCombat = [&]()
     {
-        uintptr_t whenCombatActionsAreUpdatedChecksBombDrop = 0x14265C72B;
+        uintptr_t whenCombatActionsAreUpdatedChecksBombDrop = 0x14265C88B;
         PresetScript_CCodeInTheMiddle(whenCombatActionsAreUpdatedChecksBombDrop, 5,
             WhenCombatActionsAreUpdatedChecksBombDrop_DisableOriginalBombDropHandlingInCombat, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
     auto DisableOutOfCombatVersionOfQuickshotWhenInCombat = [&]()
     {
-        const uintptr_t whenUpdatingOutOfCombatVersionOfQuickshot = 0x14265D11F;
+        const uintptr_t whenUpdatingOutOfCombatVersionOfQuickshot = 0x14265D27F;
         PresetScript_CCodeInTheMiddle(whenUpdatingOutOfCombatVersionOfQuickshot, 5,
             WhenUpdatingOutOfCombatVersionOfQuickshot_DisableWhenInCombat, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
@@ -568,7 +568,7 @@ MoreSituationsToDropBomb::MoreSituationsToDropBomb()
         Because I put the player into High Profile while dropping bombs,
         doing so in combat might result in undesired breaking of combat by sprint.
         */
-        const uintptr_t whenCheckingIfLeaveCombatBySprint = 0x1426593BF;
+        const uintptr_t whenCheckingIfLeaveCombatBySprint = 0x14265951F;
         PresetScript_CCodeInTheMiddle(whenCheckingIfLeaveCombatBySprint, 7,
             WhenCheckingIfLeaveCombatBySprint_MakeSureIsReallyTryingToSprint, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
@@ -581,7 +581,7 @@ MoreSituationsToDropBomb::MoreSituationsToDropBomb()
 
     auto DisableBombAimInHaystack = [&]()
     {
-        uintptr_t whenLongPressedToAimBomb = 0x1426647AF;
+        uintptr_t whenLongPressedToAimBomb = 0x14266491F;
         PresetScript_CCodeInTheMiddle(whenLongPressedToAimBomb, 5,
             WhenLongPressedToAimBomb_DontTryIfInHaystack, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };

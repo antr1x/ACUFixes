@@ -54,6 +54,7 @@ public:
 	AtomDataContainerWrapper ComparisonValue; //0x0010
 
 	// @helper_functions
-	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439D8500; }
+	// This probably deserves another look later, but for now it seems to follow the same +0x2010 shift as the rest of this Atom graph TypeInfo block.
+	static TypeInfo& GetTI() { return *(TypeInfo*)0x1439DA510; }
 }; //Size: 0x0030
 assert_sizeof(AtomCondition, 0x30);
