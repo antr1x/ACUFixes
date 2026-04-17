@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Manual run only: tag to build and publish, for example v0.9.4.0"
+        required: true
+        type: string
+      release_name:
+        description: "Manual run only: optional GitHub Release title. Leave empty to use the tag."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-2022
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.ref_name }}
+      RELEASE_NAME: ${{ github.event_name == 'workflow_dispatch' && inputs.release_name || github.ref_name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Build Release x64
+        shell: pwsh
+        run: .\build_release.ps1
+
+      - name: Package release files
+        shell: pwsh
+        run: .\package_release.ps1
+
+      - name: Create release archive
+        shell: pwsh
+        run: |
+          $archiveName = "ACUFixesAndPluginLoader-${{ env.RELEASE_TAG }}.zip"
+          Compress-Archive -Path package/* -DestinationPath $archiveName -Force
+          "RELEASE_ARCHIVE=$archiveName" >> $env:GITHUB_ENV
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ACUFixesAndPluginLoader-Release-x64
+          if-no-files-found: error
+          path: package/*
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_NAME }}
+          files: ${{ env.RELEASE_ARCHIVE }}
+          generate_release_notes: true

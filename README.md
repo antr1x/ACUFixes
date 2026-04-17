@@ -1,5 +1,5 @@
 # ACUFixes
-Addon/fixes for Assassin's Creed Unity 1.5.0\
+Addon/fixes for Assassin's Creed Unity 1.5.1\
 A small mod that aims to fix some of the annoying things about Assassin's Creed Unity.\
 Now with a Plugin Loader.
 
@@ -28,7 +28,7 @@ Now with a Plugin Loader.
 - Unbreakable Disguise
 
 ## Requirements
-Assassin's Creed Unity 1.5.0.
+Assassin's Creed Unity 1.5.1.
 
 ## How to use
 To install:\
