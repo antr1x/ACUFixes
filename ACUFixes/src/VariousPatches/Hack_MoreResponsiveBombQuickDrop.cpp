@@ -522,7 +522,7 @@ MoreSituationsToDropBomb::MoreSituationsToDropBomb()
     PresetScript_NOP(whenCheckingIfDropbombIsAvailableInAbilitySets, 6);
 
 
-    uintptr_t whenSuccessfullyStartingToDropBomb = 0x141a2a560;
+    uintptr_t whenSuccessfullyStartingToDropBomb = 0x141A2B2D0;
     PresetScript_CCodeInTheMiddle(whenSuccessfullyStartingToDropBomb, 6,
         WhenSuccessfullyStartingToDropBomb_RememberSuccess, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     uintptr_t whenDropBombAnimationEnds = 0x141AA7430;
