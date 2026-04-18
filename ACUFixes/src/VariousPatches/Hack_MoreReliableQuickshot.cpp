@@ -363,7 +363,7 @@ void WhenCheckingIfTimerToEndQuickshotIsActive_ReactivateIfRecentlyFailed(AllReg
 }
 void WhenGettingRangedWeaponTarget_onWallInJumpEtc_ForceScan(AllRegisters* params);
 DEFINE_GAME_FUNCTION(sub_141B034A0, 0x141B02840, char, __fastcall, (FunctorBase* a1, FunctorBase* a2));
-DEFINE_GAME_FUNCTION(sub_1419FA390, 0x1419f8910, char, __fastcall, (HumanStatesHolder* p_humanStates, unsigned int edx0, __int64 a3));
+DEFINE_GAME_FUNCTION(sub_1419FA390, 0x1419F9650, char, __fastcall, (HumanStatesHolder* p_humanStates, unsigned int edx0, __int64 a3));
 bool g_MoreReliableQuickshot_DuringAssassination_IsTryingToStartAQuickshotNow = false;
 void WhenTryingToMakeAQuickshotAndLeadingToAnAllowUnsheathingCheck_RememberTheContextOfQuickshotAttempt(AllRegisters* params)
 {
@@ -411,7 +411,7 @@ MoreReliableQuickshot::MoreReliableQuickshot()
     {
         // Triggers every frame when you're in state that would normally prevent you from having a gun out:
         // during assassinations, jumps, while on wall, etc.
-        const uintptr_t whenInstantSheathingOrReholsteringDueToParkour = 0x141ab2d29;
+        const uintptr_t whenInstantSheathingOrReholsteringDueToParkour = 0x141AB36D9;
         PresetScript_CCodeInTheMiddle(whenInstantSheathingOrReholsteringDueToParkour, 5,
             WhenInstantSheathingOrReholsteringDueToParkour_DontDoThat, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, false);
     };
@@ -476,7 +476,7 @@ MoreReliableQuickshot::MoreReliableQuickshot()
     };
     auto AllowScanForQuickshotTargetInMostSituations = [&]()
     {
-        uintptr_t whenUpdatingRangedWeaponTarget_onWallInJumpEtc_fnepilogue = 0x141aac70f;
+        uintptr_t whenUpdatingRangedWeaponTarget_onWallInJumpEtc_fnepilogue = 0x141AAD06F;
         PresetScript_CCodeInTheMiddle(whenUpdatingRangedWeaponTarget_onWallInJumpEtc_fnepilogue, 5,
             WhenGettingRangedWeaponTarget_onWallInJumpEtc_ForceScan, RETURN_TO_RIGHT_AFTER_STOLEN_BYTES, true);
     };
